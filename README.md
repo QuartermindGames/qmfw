@@ -28,6 +28,10 @@ Do let me know if you find any use of it, and I'll give you a shoutout!
 **Keep in mind this is likely far from the most efficient library in the world.
 If performance is a big priority for you, then I would highly recommend looking elsewhere!**
 
+The qmfw library is mostly focused on supporting ApeTech at this time, and has such been cut down overtime to remove unnecessary features.
+An older, less polished but larger version of this library, called Hei, is available [here](https://git.solemnwarning.net/hogsy/hei).
+It supports a larger range of formats and is often used for my own reverse-engineering work, and will likely continue being developed in parallel.
+
 # Features
 
 The qmfw library is made up of the following.
