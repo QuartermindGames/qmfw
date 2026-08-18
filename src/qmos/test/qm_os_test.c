@@ -143,7 +143,7 @@ QM_TEST_FUNC( string )
 {
 	static constexpr char MSG[] = "Hello to you!";
 
-	char  *buf = qm_os_string_alloc( "Hello World! %s", MSG );
+	char *buf = qm_os_string_alloc( "Hello World! %s", MSG );
 	QM_TEST_ASSERT( buf != nullptr );
 	QM_TEST_ASSERT( strcmp( buf, "Hello World! Hello to you!" ) == 0 );
 
@@ -171,6 +171,15 @@ QM_TEST_FUNC( string )
 
 	qm_os_string_to_lower( buf, size );
 	QM_TEST_ASSERT( strncmp( buf, "!uoy ot olleh !dlrow olleh", 12 ) == 0 );
+
+	QM_TEST_ASSERT( qm_os_string_copy( tmp, "Hello world, how're you?", sizeof( tmp ) ) == 7 );
+	QM_TEST_ASSERT( strcmp( tmp, "Hello w" ) == 0 );
+	QM_TEST_ASSERT( qm_os_string_copy( buf, "Hello world, how're you?", size ) == 24 );
+	QM_TEST_ASSERT( strcmp( buf, "Hello world, how're you?" ) == 0 );
+	QM_TEST_ASSERT( qm_os_string_copy( buf, "Hello world, how're you?", 6 ) == 5 );
+	QM_TEST_ASSERT( strcmp( buf, "Hello" ) == 0 );
+	QM_TEST_ASSERT( qm_os_string_copy( buf, "Hello world, how're you?", 2 ) == 1 );
+	QM_TEST_ASSERT( strcmp( buf, "H" ) == 0 );
 
 	qm_os_memory_free( buf );
 }

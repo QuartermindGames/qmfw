@@ -29,6 +29,13 @@ extern "C"
 	 */
 	char *qm_os_string_split( const char *s, size_t size, const char *sep );
 
+	/**
+	 * Similar to strscpy on Linux; copies a string into the destination
+	 * buffer and returns the number of bytes copied (excluding null terminator).
+	 * Destination is always null terminated.
+	 */
+	size_t qm_os_string_copy( char *dst, const char *src, size_t size );
+
 #if defined( __cplusplus )
 };
 #endif

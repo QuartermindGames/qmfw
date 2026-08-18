@@ -4,6 +4,7 @@
 
 #include "qmos/public/qm_os.h"
 #include "qmos/public/qm_os_memory.h"
+#include "qmos/public/qm_os_string.h"
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -219,4 +220,21 @@ char *qm_os_string_split( const char *s, const size_t size, const char *sep )
 	}
 
 	return dest;
+}
+
+size_t qm_os_string_copy( char *dst, const char *src, const size_t size )
+{
+	if ( size == 0 )
+	{
+		return 0;
+	}
+
+	size_t i;
+	for ( i = 0; i < size - 1 && src[ i ] != '\0'; ++i )
+	{
+		dst[ i ] = src[ i ];
+	}
+	dst[ i ] = '\0';
+
+	return i;
 }
