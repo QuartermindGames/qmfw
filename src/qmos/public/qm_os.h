@@ -113,6 +113,16 @@ enum
 #	error "Unsupported compiler!"
 #endif
 
+#ifdef __cplusplus
+#	define QM_OS_EXTERN_C \
+		extern "C"         \
+		{
+#	define QM_OS_EXTERN_C_END }
+#else
+#	define QM_OS_EXTERN_C
+#	define QM_OS_EXTERN_C_END
+#endif
+
 /////////////////////////////////////////////////////////////////////////////////////
 // Helper Macros
 /////////////////////////////////////////////////////////////////////////////////////

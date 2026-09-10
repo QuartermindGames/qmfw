@@ -1683,19 +1683,14 @@ static char gl_extensions[ 4096 ][ 4096 ] = { { '\0' } };
 
 #if defined( DEBUG_GL )
 static void xgl_message_callback(
-        GLenum        source,
-        GLenum        type,
-        GLuint        id,
-        GLenum        severity,
-        GLsizei       length,
-        const GLchar *message,
-        void         *param )
+        [[maybe_unused]] GLenum  source,
+        GLenum                   type,
+        [[maybe_unused]] GLuint  id,
+        GLenum                   severity,
+        [[maybe_unused]] GLsizei length,
+        const GLchar            *message,
+        [[maybe_unused]] void   *param )
 {
-	PL_UNUSEDVAR( source );
-	PL_UNUSEDVAR( id );
-	PL_UNUSEDVAR( length );
-	PL_UNUSEDVAR( param );
-
 	if ( severity == GL_DEBUG_SEVERITY_LOW )
 	{
 		return;
@@ -1783,16 +1778,18 @@ static PLFunctionResult xgl_initialize()
 	XGL_DEBUG( "  renderer:   %s\n", ( const char * ) glGetString( GL_RENDERER ) );
 	XGL_DEBUG( "  vendor:     %s\n", ( const char * ) glGetString( GL_VENDOR ) );
 	XGL_DEBUG( "  version:    %s\n", version );
-	//GLLog( "  extensions:\n" );
 
+#if defined( DEBUG_GL )
+	XGL_DEBUG( "  extensions:\n" );
 	unsigned int numExtensions;
 	XGL_CALL( glGetIntegerv( GL_NUM_EXTENSIONS, ( GLint * ) &numExtensions ) );
 	for ( unsigned int i = 0; i < numExtensions; ++i )
 	{
 		const char *extension = ( char * ) glGetStringi( GL_EXTENSIONS, i );
 		snprintf( gl_extensions[ i ], sizeof( gl_extensions[ i ] ), "%s", extension );
-		//GLLog( "    %s\n", extension );
+		XGL_DEBUG( "    %s\n", extension );
 	}
+#endif
 
 	if ( !XGL_VERSION( 4, 6 ) )
 	{
