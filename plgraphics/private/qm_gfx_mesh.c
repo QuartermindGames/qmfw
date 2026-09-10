@@ -41,13 +41,6 @@ void PlgGenerateTextureCoordinates( QmGfxMeshVertex *vertices, unsigned int numV
 	}
 }
 
-QmMathVector3f PlgGenerateVertexNormal( QmMathVector3f a, QmMathVector3f b, QmMathVector3f c )
-{
-	QmMathVector3f x = qm_math_vector3f( c.x - b.x, c.y - b.y, c.z - b.z );
-	QmMathVector3f y = qm_math_vector3f( a.x - b.x, a.y - b.y, a.z - b.z );
-	return qm_math_vector3f_normalize( qm_math_vector3f_cross_product( x, y ) );
-}
-
 QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode, unsigned int numTriangles, unsigned int numVertices )
 {
 	QmGfxMesh *mesh = QM_OS_MEMORY_CALLOC( 1, sizeof( QmGfxMesh ) );

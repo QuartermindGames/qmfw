@@ -518,6 +518,11 @@ extern "C"
 	void qm_math_compute_min_max( const QmMathVector3f *vertices, unsigned int numVertices, QmMathVector3f *minsDst, QmMathVector3f *maxsDst, bool absolute );
 
 	/**
+	 * Compute triangle normal.
+	 */
+	QmMathVector3f qm_math_compute_triangle_normal( QmMathVector3f a, QmMathVector3f b, QmMathVector3f c );
+
+	/**
 	 * Compute the normal based on a given set of vertices.
 	 * @param vertices Array of vertices to use for computing the face normal.
 	 * @param numVertices The number of vertices in the array.

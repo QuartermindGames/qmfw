@@ -154,9 +154,6 @@ void qm_gfx_mesh_draw_instanced( QmGfxMesh *mesh, const PLMatrix4 *transforms, u
  */
 void PlgGenerateTextureCoordinates( QmGfxMeshVertex *vertices, unsigned int numVertices, QmMathVector2f textureOffset, QmMathVector2f textureScale );
 
-//TODO: move into math library
-QmMathVector3f PlgGenerateVertexNormal( QmMathVector3f a, QmMathVector3f b, QmMathVector3f c );
-
 /* immediate mode style api */
 //TODO: move into engine
 QmGfxMesh   *PlgImmBegin( QmGfxMeshPrimitive primitive );

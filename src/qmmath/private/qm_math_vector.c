@@ -70,18 +70,22 @@ void qm_math_compute_min_max( const QmMathVector3f *vertices, const unsigned int
 	}
 }
 
+QmMathVector3f qm_math_compute_triangle_normal( const QmMathVector3f a, const QmMathVector3f b, const QmMathVector3f c )
+{
+	const QmMathVector3f x = qm_math_vector3f( c.x - b.x, c.y - b.y, c.z - b.z );
+	const QmMathVector3f y = qm_math_vector3f( a.x - b.x, a.y - b.y, a.z - b.z );
+	return qm_math_vector3f_normalize( qm_math_vector3f_cross_product( x, y ) );
+}
+
 QmMathVector3f qm_math_compute_polygon_normal( const QmMathVector3f *vertices, unsigned int numVertices )
 {
 	QmMathVector3f normal = {};
 	for ( unsigned int i = 0; i < numVertices; i += 3 )
 	{
-		QmMathVector3f a = vertices[ i ];
-		QmMathVector3f b = vertices[ i + 1 ];
-		QmMathVector3f c = vertices[ i + 2 ];
-
-		QmMathVector3f x = qm_math_vector3f( c.x - b.x, c.y - b.y, c.z - b.z );
-		QmMathVector3f y = qm_math_vector3f( a.x - b.x, a.y - b.y, a.z - b.z );
-		QmMathVector3f n = qm_math_vector3f_normalize( qm_math_vector3f_cross_product( x, y ) );
+		const QmMathVector3f a = vertices[ i ];
+		const QmMathVector3f b = vertices[ i + 1 ];
+		const QmMathVector3f c = vertices[ i + 2 ];
+		const QmMathVector3f n = qm_math_compute_triangle_normal( a, b, c );
 
 		normal = qm_math_vector3f_add( normal, n );
 	}

@@ -204,15 +204,15 @@ static QmMathVector3f **GenerateNormalsPerGroup( const CPJModel *cpjModel ) {
 			}
 
 			normals[ i ][ cpjModel->triangles[ j ].x ] = qm_math_vector3f_add( normals[ i ][ cpjModel->triangles[ j ].x ],
-			                                                           PlgGenerateVertexNormal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
+			                                                           qm_math_compute_triangle_normal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].y ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].z ].position ) );
 			normals[ i ][ cpjModel->triangles[ j ].y ] = qm_math_vector3f_add( normals[ i ][ cpjModel->triangles[ j ].y ],
-			                                                           PlgGenerateVertexNormal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
+			                                                           qm_math_compute_triangle_normal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].y ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].z ].position ) );
 			normals[ i ][ cpjModel->triangles[ j ].z ] = qm_math_vector3f_add( normals[ i ][ cpjModel->triangles[ j ].z ],
-			                                                           PlgGenerateVertexNormal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
+			                                                           qm_math_compute_triangle_normal( cpjModel->vertices[ cpjModel->triangles[ j ].x ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].y ].position,
 			                                                                                    cpjModel->vertices[ cpjModel->triangles[ j ].z ].position ) );
 		}
