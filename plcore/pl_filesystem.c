@@ -1005,6 +1005,28 @@ bool PlPathExists( const char *path )
 	return true;
 }
 
+QmFsPathType qm_fs_get_path_type( const char *path )
+{
+	struct stat buf;
+	if ( stat( path, &buf ) != 0 )
+	{
+		PlReportErrorF( PL_RESULT_FILEPATH, "failed to stat (%s) (%u)", path, errno );
+		return QM_FS_PATH_TYPE_INVALID;
+	}
+
+	if ( ( buf.st_mode & S_IFMT ) == S_IFDIR )
+	{
+		return QM_FS_PATH_TYPE_DIR;
+	}
+	if ( ( buf.st_mode & S_IFMT ) == S_IFREG )
+	{
+		return QM_FS_PATH_TYPE_FILE;
+	}
+
+	// it's not a file or a dir *shrug*
+	return QM_FS_PATH_TYPE_INVALID;
+}
+
 bool qm_fs_delete_file( const char *path )
 {
 	if ( !qm_fs_check_local_file_exists( path ) )

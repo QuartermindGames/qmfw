@@ -200,6 +200,20 @@ bool qm_fs_check_file_exists( const char *path );
 bool PlLocalPathExists( const char *path );
 bool PlPathExists( const char *path );
 
+typedef enum QmFsPathType : int8_t
+{
+	QM_FS_PATH_TYPE_INVALID = -1,
+	QM_FS_PATH_TYPE_DIR,
+	QM_FS_PATH_TYPE_FILE,
+} QmFsPathType;
+
+/**
+ * Attempts to determine if the given path is a directory or file.
+ * If it returns QM_FS_PATH_TYPE_INVALID, this indicates it's neither (probably invalid),
+ * otherwise QM_FS_PATH_TYPE_DIR indicates a dir and QM_FS_PATH_TYPE_FILE a file.
+ */
+QmFsPathType qm_fs_get_path_type( const char *path );
+
 void PlScanDirectory( const char *path, const char *extension, void ( *Function )( const char *, void * ), bool recursive, void *userData );
 
 bool PlCreateDirectory( const char *path );
