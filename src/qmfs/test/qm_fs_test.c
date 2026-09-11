@@ -9,7 +9,11 @@
 QM_TEST_FUNC( paths )
 {
 	QM_TEST_ASSERT( qm_fs_get_path_type( "." ) == QM_FS_PATH_TYPE_DIR );
-	QM_TEST_ASSERT( qm_fs_get_path_type( "./qm-fs-test" ) == QM_FS_PATH_TYPE_FILE );
+
+	PLPath exePath;
+	QM_TEST_ASSERT( PlGetExecutablePath( exePath, sizeof( exePath ) ) != nullptr );
+	QM_TEST_ASSERT( qm_fs_get_path_type( exePath ) == QM_FS_PATH_TYPE_FILE );
+
 	QM_TEST_ASSERT( qm_fs_get_path_type( "I DO NOT EXIST" ) == QM_FS_PATH_TYPE_INVALID );
 }
 QM_TEST_FUNC_END()
