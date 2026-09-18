@@ -66,17 +66,17 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 	assert( header->magic == QM_OS_MEMORY_MAGIC );
 
 	// ensure we'll still have room for the header
-	newSize += sizeof( QmOsMemoryBlockHeader );
+	const size_t newAllocSize = newSize + sizeof( QmOsMemoryBlockHeader );
+
 	// and we'll need to resize from the header pos
 	buf = ( uint8_t * ) header;
-
-	buf = qmOsMemoryReAllocCallback( buf, newSize );
+	buf = qmOsMemoryReAllocCallback( buf, newAllocSize );
 	if ( buf == nullptr )
 	{
 		// unlike previous design, caller decides via callback if they want to abort or not
 		if ( qmOsMemoryFailCallback != nullptr )
 		{
-			qmOsMemoryFailCallback( newSize, QM_OS_MEMORY_FAIL_TYPE_REALLOC );
+			qmOsMemoryFailCallback( newAllocSize, QM_OS_MEMORY_FAIL_TYPE_REALLOC );
 		}
 
 		return nullptr;

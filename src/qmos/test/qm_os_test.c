@@ -92,6 +92,16 @@ QM_TEST_FUNC( memory )
 	QM_TEST_ASSERT( qm_os_memory_get_total() > 0 );
 	QM_TEST_ASSERT( qm_os_memory_get_total_available() > 0 );
 	QM_TEST_ASSERT( qm_os_memory_get_usage() > 0 );
+
+	QM_TEST_ASSERT( ( thing = qm_os_memory_realloc( nullptr, sizeof( MyThing ) ) ) != nullptr );
+	QM_TEST_ASSERT( ( thing = qm_os_memory_realloc( thing, sizeof( MyThing ) * 8 ) ) != nullptr );
+	qm_os_memory_free( thing );
+
+	char *anotherThing = qm_os_memory_alloc( 8, sizeof( char ), nullptr );
+	QM_TEST_ASSERT( qm_os_memory_get_block_size( anotherThing ) == sizeof( char ) * 8 );
+	anotherThing = qm_os_memory_realloc( anotherThing, sizeof( char ) * 32 );
+	QM_TEST_ASSERT( qm_os_memory_get_block_size( anotherThing ) == sizeof( char ) * 32 );
+	qm_os_memory_free( anotherThing );
 }
 QM_TEST_FUNC_END()
 
