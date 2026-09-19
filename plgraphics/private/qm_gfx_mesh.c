@@ -57,8 +57,11 @@ QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode m
 		}
 	}
 
-	mesh->maxVertices = numVertices;
-	mesh->vertices    = QM_OS_MEMORY_NEW_( QmGfxMeshVertex, mesh->maxVertices );
+	if ( numVertices > 0 )
+	{
+		mesh->maxVertices = numVertices;
+		mesh->vertices    = QM_OS_MEMORY_NEW_( QmGfxMeshVertex, mesh->maxVertices );
+	}
 
 	static constexpr QmGfxMeshVertexAttribute DEFAULT_ATTRIBUTES[] = {
 	        {0, 3, QM_GFX_MESH_VERTEX_ATTRIBUTE_TYPE_FLOAT32, offsetof( QmGfxMeshVertex, position )                         },
