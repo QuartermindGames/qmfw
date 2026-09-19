@@ -69,8 +69,7 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 	const size_t newAllocSize = newSize + sizeof( QmOsMemoryBlockHeader );
 
 	// and we'll need to resize from the header pos
-	buf = ( uint8_t * ) header;
-	buf = qmOsMemoryReAllocCallback( buf, newAllocSize );
+	buf = qmOsMemoryReAllocCallback( header, newAllocSize );
 	if ( buf == nullptr )
 	{
 		// unlike previous design, caller decides via callback if they want to abort or not

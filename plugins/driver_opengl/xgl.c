@@ -1473,8 +1473,8 @@ static void xgl_shader_program_link( QmGfxShaderProgram *self )
 			char *log = gInterface->core->CAlloc( ( size_t ) length, sizeof( char ), true );
 			XGL_CALL( glGetProgramInfoLog( drv->id, length, nullptr, log ) );
 			XGL_DEBUG( " LINK ERROR:\n%s\n", log );
-			gInterface->core->Free( log );
 			gInterface->core->ReportError( PL_RESULT_SHADER_COMPILE, __FUNCTION__, log );
+			gInterface->core->Free( log );
 		}
 		else
 		{
