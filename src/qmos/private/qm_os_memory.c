@@ -21,6 +21,7 @@ QM_OS_EXPORT void *( *qmOsMemoryReAllocCallback )( void *ptr, size_t newSize )  
 QM_OS_EXPORT void ( *qmOsMemoryFreeCallback )( void *ptr )                            = free;
 QM_OS_EXPORT void ( *qmOsMemoryFailCallback )( size_t size, QmOsMemoryFailType type ) = nullptr;
 
+#ifdef QM_OS_MEMORY_BLOCK
 static constexpr uint32_t QM_OS_MEMORY_MAGIC = QM_OS_MAGIC_TO_NUM( 'Q', 'M', 'O', 'S' );
 typedef struct QmOsMemoryBlockHeader
 {
@@ -28,9 +29,11 @@ typedef struct QmOsMemoryBlockHeader
 	size_t   size;
 	void ( *destructorCallback )( void *ptr );
 } QmOsMemoryBlockHeader;
+#endif
 
 void *qm_os_memory_alloc( const size_t num, size_t size, void ( *destructor )( void *ptr ) )
 {
+#ifdef QM_OS_MEMORY_BLOCK
 	// make room for our header
 	const size_t totalSize = num * size + sizeof( QmOsMemoryBlockHeader );
 
@@ -52,6 +55,9 @@ void *qm_os_memory_alloc( const size_t num, size_t size, void ( *destructor )( v
 	header->destructorCallback    = destructor;
 
 	return buf + sizeof( QmOsMemoryBlockHeader );
+#else
+	return qmOsMemoryCAllocCallback( num, size );
+#endif
 }
 
 void *qm_os_memory_realloc( void *ptr, size_t newSize )
@@ -62,6 +68,7 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 		return qm_os_memory_alloc( 1, newSize, nullptr );
 	}
 
+#ifdef QM_OS_MEMORY_BLOCK
 	QmOsMemoryBlockHeader *header = ( QmOsMemoryBlockHeader * ) ( buf - sizeof( QmOsMemoryBlockHeader ) );
 	assert( header->magic == QM_OS_MEMORY_MAGIC );
 
@@ -89,6 +96,9 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 
 	// return where the user data is
 	return buf + sizeof( QmOsMemoryBlockHeader );
+#else
+	return qmOsMemoryReAllocCallback( ptr, newSize );
+#endif
 }
 
 void qm_os_memory_free( void *ptr )
@@ -99,6 +109,7 @@ void qm_os_memory_free( void *ptr )
 		return;
 	}
 
+#ifdef QM_OS_MEMORY_BLOCK
 	QmOsMemoryBlockHeader *header = ( QmOsMemoryBlockHeader * ) ( buf - sizeof( QmOsMemoryBlockHeader ) );
 	assert( header->magic == QM_OS_MEMORY_MAGIC );
 
@@ -110,16 +121,23 @@ void qm_os_memory_free( void *ptr )
 	buf = ( uint8_t * ) header;
 
 	qmOsMemoryFreeCallback( buf );
+#else
+	qmOsMemoryFreeCallback( ptr );
+#endif
 }
 
 size_t qm_os_memory_get_block_size( void *ptr )
 {
+#ifdef QM_OS_MEMORY_BLOCK
 	uint8_t *buf = ptr;
 
 	const QmOsMemoryBlockHeader *header = ( QmOsMemoryBlockHeader * ) ( buf - sizeof( QmOsMemoryBlockHeader ) );
 	assert( header != nullptr && header->magic == QM_OS_MEMORY_MAGIC );
 
 	return header->size;
+#else
+	return 0;
+#endif
 }
 
 uint64_t qm_os_memory_get_total()
