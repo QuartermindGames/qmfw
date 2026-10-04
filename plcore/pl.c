@@ -80,7 +80,7 @@ bool PlHasCommandLineArgument( const char *arg ) {
 }
 
 // Returns result for a single command line argument.
-const char *PlGetCommandLineArgumentValue( const char *arg ) {
+const char *qm_os_cl_get_argument_value( const char *arg ) {
 	if ( arg == NULL || *arg == '\0' ) {
 		return NULL;
 	}

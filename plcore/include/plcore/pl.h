@@ -160,7 +160,7 @@ void PlReportError( PLFunctionResult result, const char *function, const char *m
 /******************************************************************/
 
 // CL Arguments
-const char *PlGetCommandLineArgumentValue( const char *arg );
+const char *qm_os_cl_get_argument_value( const char *arg );
 
 /**
  * Equivalent of using 'argv' directly, but with bounds checking.
