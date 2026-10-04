@@ -36,6 +36,13 @@ extern "C"
 	 */
 	size_t qm_os_string_copy( char *dst, const char *src, size_t size );
 
+	/**
+	 * Again, similar to strscpy and the above, however will only copy until it hits
+	 * the provided terminator.
+	 * Destination is always null terminated.
+	 */
+	size_t qm_os_string_copy_until( char *dst, const char *src, size_t size, char terminator );
+
 #if defined( __cplusplus )
 };
 #endif

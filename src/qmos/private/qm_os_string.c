@@ -238,3 +238,25 @@ size_t qm_os_string_copy( char *dst, const char *src, const size_t size )
 
 	return i;
 }
+
+size_t qm_os_string_copy_until( char *dst, const char *src, const size_t size, const char terminator )
+{
+	if ( size == 0 )
+	{
+		return 0;
+	}
+
+	size_t i;
+	for ( i = 0; i < size - 1 && src[ i ] != '\0'; ++i )
+	{
+		if ( src[ i ] == terminator )
+		{
+			break;
+		}
+
+		dst[ i ] = src[ i ];
+	}
+	dst[ i ] = '\0';
+
+	return i;
+}
