@@ -195,11 +195,11 @@ extern "C"
 	// Conversion
 	/////////////////////////////////////////////////////////////////////////////////////
 
-#define QM_MATH_VECTOR2F_TO_3F( IN ) QM_MATH_VECTOR3F( ( IN ).x, ( IN ).y, 0.0f )
-#define QM_MATH_VECTOR2F_TO_4F( IN ) QM_MATH_VECTOR4F( ( IN ).x, ( IN ).y, 0.0f, 0.0f )
+#define QM_MATH_VECTOR2F_TO_3F( IN, Z )    QM_MATH_VECTOR3F( ( IN ).x, ( IN ).y, ( Z ) )
+#define QM_MATH_VECTOR2F_TO_4F( IN, Z, W ) QM_MATH_VECTOR4F( ( IN ).x, ( IN ).y, ( Z ), ( W ) )
 
-#define QM_MATH_VECTOR3F_TO_2F( IN ) QM_MATH_VECTOR2F( ( IN ).x, ( IN ).y )
-#define QM_MATH_VECTOR3F_TO_4F( IN ) QM_MATH_VECTOR4F( ( IN ).x, ( IN ).y, ( IN ).z, 0.0f )
+#define QM_MATH_VECTOR3F_TO_2F( IN )    QM_MATH_VECTOR2F( ( IN ).x, ( IN ).y )
+#define QM_MATH_VECTOR3F_TO_4F( IN, W ) QM_MATH_VECTOR4F( ( IN ).x, ( IN ).y, ( IN ).z, ( W ) )
 
 #define QM_MATH_VECTOR4F_TO_2F( IN ) QM_MATH_VECTOR2F( ( IN ).x, ( IN ).y )
 #define QM_MATH_VECTOR4F_TO_3F( IN ) QM_MATH_VECTOR3F( ( IN ).x, ( IN ).y, ( IN ).x )
