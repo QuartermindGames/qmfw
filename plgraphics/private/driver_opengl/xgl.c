@@ -2,7 +2,7 @@
 // Purpose: OpenGL driver implementation.
 // Author:  Mark E. Sowden
 
-#include "plugin.h"
+#include "xgl.h"
 
 #include "qmos/public/qm_os.h"
 #include "qmparse/public/qm_parse.h"
@@ -12,6 +12,8 @@
 #if !defined( NDEBUG )
 #	define DEBUG_GL
 #endif
+
+const PLGDriverExportTable *gInterface = NULL;
 
 static int xgl_versionMajor = 0;
 static int xgl_versionMinor = 0;
@@ -1824,7 +1826,7 @@ static void xgl_shutdown()
 
 /////////////////////////////////////////////////////////////
 
-PLGDriverImportTable graphicsInterface = {
+const QmGfxDriverImportTable qm_gfx_xglInterface_ = {
         .Initialize = xgl_initialize,
         .Shutdown   = xgl_shutdown,
 

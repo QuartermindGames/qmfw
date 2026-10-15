@@ -12,15 +12,7 @@
 
 // Operating System
 
-#define PL_SYSTEM_OS_WINDOWS 0
-#define PL_SYSTEM_OS_LINUX   1
-#define PL_SYSTEM_OS_MACOS   2
-#define PL_SYSTEM_OS_FREEBSD 3
-#define PL_SYSTEM_OS_SOLARIS 4
-
 #if defined( _WIN32 )
-#	define PL_SYSTEM_OS PL_SYSTEM_OS_WINDOWS
-
 #	if 0
 #		define PL_SYSTEM_MAX_PATH 259
 #	else
@@ -70,8 +62,6 @@
 #		include <strings.h>
 #	endif
 
-#	define PL_SYSTEM_OS PL_SYSTEM_OS_LINUX
-
 #	define PL_SYSTEM_MAX_PATH     256
 #	define PL_SYSTEM_MAX_USERNAME 32
 
@@ -83,8 +73,6 @@
 #		include <strings.h>
 #	endif
 
-#	define PL_SYSTEM_OS PL_SYSTEM_OS_FREEBSD
-
 #	define PL_SYSTEM_MAX_PATH     256
 #	define PL_SYSTEM_MAX_USERNAME 32
 
@@ -95,8 +83,6 @@
 #		include <dirent.h>
 #		include <dlfcn.h>
 #	endif
-
-#	define PL_SYSTEM_OS PL_SYSTEM_OS_MACOS
 
 #	define PL_SYSTEM_MAX_PATH     512
 #	define PL_SYSTEM_MAX_USERNAME 32

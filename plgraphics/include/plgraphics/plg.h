@@ -12,7 +12,7 @@ static constexpr int QM_GFX_RESULT_SUCCESS = 0;
 #include <plgraphics/plg_texture.h>
 #include <plgraphics/plg_framebuffer.h>
 
-typedef struct PLGDriverImportTable PLGDriverImportTable;
+typedef struct QmGfxDriverImportTable QmGfxDriverImportTable;
 
 typedef enum PLGCullMode
 {
@@ -114,7 +114,7 @@ PL_EXTERN_C
 
 #if !defined( PL_COMPILE_PLUGIN )
 
-PLFunctionResult PlgInitializeGraphics( void );
+PLFunctionResult qm_gfx_initialize( void );
 void             PlgShutdownGraphics( void );
 
 void qm_gfx_set_clip_plane( const QmMathVector4f *clip, const PLMatrix4 *clipMatrix, bool transpose );

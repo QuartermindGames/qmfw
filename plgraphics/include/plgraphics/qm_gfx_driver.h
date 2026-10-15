@@ -14,6 +14,13 @@ PL_EXTERN_C
 typedef struct QmGfxShaderStage   QmGfxShaderStage;
 typedef struct QmGfxShaderProgram QmGfxShaderProgram;
 
+typedef enum QmGfxDriverInterface
+{
+	QM_GFX_DRIVER_INTERFACE_OPENGL,
+
+	QM_GFX_DRIVER_INTERFACE_MAX
+} QmGfxDriverInterface;
+
 /**
  * For a little further clarity, technically
  * speaking 'drivers' in this context are handled
@@ -46,7 +53,7 @@ typedef struct PLGDriverExportTable
 	QmGfxTexture *( *CreateTexture )( QmGfxTextureType type );
 } PLGDriverExportTable;
 
-typedef struct PLGDriverImportTable
+typedef struct QmGfxDriverImportTable
 {
 	PLFunctionResult ( *Initialize )( void );
 	void ( *Shutdown )( void );
@@ -143,19 +150,15 @@ typedef struct PLGDriverImportTable
 	void ( *SetTextureWrapMode )( QmGfxTexture *texture, QmGfxTextureWrapMode wrapMode );
 
 	void ( *SetClipPlane )( const QmMathVector4f *clipPlane, const PLMatrix4 *clipPlaneMatrix, bool transpose );
-} PLGDriverImportTable;
+} QmGfxDriverImportTable;
 
 #if !defined( PL_COMPILE_PLUGIN )
 #	define PLG_DRIVER_QUERY_FUNCTION "QueryGraphicsDriver"
 typedef const PLGDriverDescription *( *PLGDriverQueryFunction )( void );
 #	define PLG_DRIVER_INIT_FUNCTION "InitializeGraphicsDriver"
-typedef const PLGDriverImportTable *( *PLGDriverInitializationFunction )( const PLGDriverExportTable *exportTable );
+typedef const QmGfxDriverImportTable *( *PLGDriverInitializationFunction )( const PLGDriverExportTable *exportTable );
 
-PL_EXTERN bool         PlgRegisterDriver( const char *path );
-PL_EXTERN unsigned int PlgScanForDrivers( const char *path );
-
-PL_EXTERN const char     **PlgGetAvailableDriverInterfaces( unsigned int *numModes );
-PL_EXTERN PLFunctionResult PlgSetDriver( const char *mode );
+PL_EXTERN PLFunctionResult qm_gfx_driver_set( unsigned int mode );
 #endif
 
 PL_EXTERN_C_END

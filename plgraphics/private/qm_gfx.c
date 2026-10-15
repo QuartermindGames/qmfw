@@ -14,7 +14,7 @@ GfxState gfx_state;
 	INITIALIZATION
 ===========================*/
 
-PLFunctionResult PlgInitializeGraphics( void )
+PLFunctionResult qm_gfx_initialize( void )
 {
 	memset( &gfx_state, 0, sizeof( GfxState ) );
 

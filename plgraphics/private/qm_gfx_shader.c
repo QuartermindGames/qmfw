@@ -2,7 +2,7 @@
 // Purpose: Shaders
 // Author:  Mark E. Sowden
 
-#include <plgraphics/plg_driver_interface.h>
+#include <plgraphics/qm_gfx_driver.h>
 
 #include "plg_private.h"
 

@@ -5,7 +5,7 @@
 #include "qmos/public/qm_os_memory.h"
 
 #include <plgraphics/plg.h>
-#include <plgraphics/plg_driver_interface.h>
+#include <plgraphics/qm_gfx_driver.h>
 #include <plgraphics/plg_texture.h>
 
 PL_EXTERN_C
@@ -18,7 +18,7 @@ PL_EXTERN_C
 
 typedef struct GfxState
 {
-	const PLGDriverImportTable *interface;
+	const QmGfxDriverImportTable *interface;
 
 	PLGCullMode current_cullmode;
 

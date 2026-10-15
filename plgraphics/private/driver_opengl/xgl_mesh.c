@@ -2,7 +2,7 @@
 // Purpose: OpenGL mesh management stuff :)
 // Author:  Mark E. Sowden
 
-#include "plugin.h"
+#include "xgl.h"
 
 typedef struct XglMesh
 {

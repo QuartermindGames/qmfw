@@ -1662,7 +1662,7 @@ const char *PlGetPathForAlias( const char *alias )
 
 char *hei_fs_get_temp_path( char *dst, size_t dstSize )
 {
-#if ( PL_SYSTEM_OS == PL_SYSTEM_OS_LINUX )
+#if ( QM_OS_SYSTEM == QM_OS_SYSTEM_LINUX )
 
 	char dir[] = "/tmp/heiXXXXXX";
 	if ( mkdtemp( dir ) == nullptr )
@@ -1673,7 +1673,7 @@ char *hei_fs_get_temp_path( char *dst, size_t dstSize )
 
 	snprintf( dst, dstSize, "%s", dir );
 
-#elif ( PL_SYSTEM_OS == PL_SYSTEM_OS_WINDOWS )
+#elif ( QM_OS_SYSTEM == QM_OS_SYSTEM_WINDOWS )
 
 	//TODO: this is untested...
 

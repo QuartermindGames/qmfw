@@ -3,7 +3,7 @@
 #pragma once
 
 #define PL_COMPILE_PLUGIN 1
-#include <plgraphics/plg_driver_interface.h>
+#include <plgraphics/qm_gfx_driver.h>
 extern const PLGDriverExportTable *gInterface;
 
 #include <GL/glew.h>
