@@ -123,7 +123,7 @@ static PLPackage *parse_tre_file( PLFile *file ) {
 
 PLPackage *asa_format_tre_load( const char *path ) {
 	if ( hashTable == NULL ) {
-		hashTable = PlCreateHashTable();
+		hashTable = qm_os_hash_table();
 		for ( unsigned int i = 0; i < numVexxStrings; ++i ) {
 			uint32_t hash = pl_crc32( vexxStrings[ i ], strlen( vexxStrings[ i ] ), 0 );
 			PlInsertHashTableNode( hashTable, &hash, sizeof( uint32_t ), ( void * ) vexxStrings[ i ] );

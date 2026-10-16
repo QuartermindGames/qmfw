@@ -11,8 +11,7 @@ PL_EXTERN_C
 typedef struct PLHashTable PLHashTable;
 typedef struct PLHashTableNode PLHashTableNode;
 
-PLHashTable *PlCreateHashTable( void );
-void PlDestroyHashTable( PLHashTable *hashTable );
+PLHashTable *qm_os_hash_table( void );
 void PlDestroyHashTableEx( PLHashTable *hashTable, void ( *elementDeleter )( void *user ) );
 void PlClearHashTable( PLHashTable *hashTable );
 

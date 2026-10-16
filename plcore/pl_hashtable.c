@@ -21,18 +21,15 @@ typedef struct PLHashTable {
 	unsigned int numNodes;
 } PLHashTable;
 
-PLHashTable *PlCreateHashTable( void ) {
-	return QM_OS_MEMORY_NEW( PLHashTable );
+static void qm_os_hash_table_destructor( void *ptr )
+{
+	PLHashTable *table = ptr;
+	PlClearHashTable( table );
 }
 
-void PlDestroyHashTable( PLHashTable *hashTable ) {
-	if ( hashTable == NULL ) {
-		return;
-	}
-
-	PlClearHashTable( hashTable );
-
-	qm_os_memory_free( hashTable );
+PLHashTable *qm_os_hash_table()
+{
+	return QM_OS_MEMORY_NEW_D( PLHashTable, qm_os_hash_table_destructor );
 }
 
 void PlDestroyHashTableEx( PLHashTable *hashTable, void ( *elementDeleter )( void *user ) ) {

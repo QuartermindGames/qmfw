@@ -44,7 +44,7 @@ static PLHashTable *populate_name_table( const QmFsFile *file ) {
 		return NULL;
 	}
 
-	PLHashTable *nameTable = PlCreateHashTable();
+	PLHashTable *nameTable = qm_os_hash_table();
 	while ( true ) {
 		char line[ 1024 ];
 		const char *p = qm_fs_file_read_string( nameFile, line, sizeof( line ) );

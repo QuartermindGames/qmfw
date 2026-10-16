@@ -11,7 +11,7 @@ static PLHashTable *packageWriteFormats = NULL;//PackageWriter
 
 void PlRegisterPackageWriter( const char *formatTag, PLWritePackageFunction writeFunction ) {
 	if ( packageWriteFormats == NULL ) {
-		packageWriteFormats = PlCreateHashTable();
+		packageWriteFormats = qm_os_hash_table();
 	}
 
 	PlInsertHashTableNode( packageWriteFormats, formatTag, strlen( formatTag ), writeFunction );
@@ -38,7 +38,7 @@ void PlRegisterStandardPackageWriters( unsigned int flags ) {
 }
 
 void PlClearPackageWriters( void ) {
-	PlDestroyHashTable( packageWriteFormats );
+	qm_os_memory_free( packageWriteFormats );
 }
 
 QmFsPackageFile *PlAppendPackageFromFile( QmFsPackage *package, const char *source, const char *filename, PLCompressionType compressionType ) {
