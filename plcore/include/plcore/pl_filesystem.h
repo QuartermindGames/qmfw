@@ -309,10 +309,10 @@ int16_t qm_fs_file_read_int16( QmFsFile *self, bool big_endian, bool *status );
 int32_t qm_fs_file_read_int32( QmFsFile *self, bool big_endian, bool *status );
 int64_t qm_fs_file_read_int64( QmFsFile *self, bool big_endian, bool *status );
 
-#	define PL_READUINT8( FILE, STATUS )          ( uint8_t ) qm_fs_file_read_int8( ( FILE ), ( STATUS ) )
-#	define PL_READUINT16( FILE, ENDIAN, STATUS ) ( uint16_t ) qm_fs_file_read_int16( ( FILE ), ( ENDIAN ), ( STATUS ) )
-#	define PL_READUINT32( FILE, ENDIAN, STATUS ) ( uint32_t ) qm_fs_file_read_int32( ( FILE ), ( ENDIAN ), ( STATUS ) )
-#	define PL_READUINT64( FILE, ENDIAN, STATUS ) ( uint64_t ) qm_fs_file_read_int64( ( FILE ), ( ENDIAN ), ( STATUS ) )
+#	define QM_FS_FILE_READ_UINT8( FILE, STATUS )          ( uint8_t ) qm_fs_file_read_int8( ( FILE ), ( STATUS ) )
+#	define QM_FS_FILE_READ_UINT16( FILE, ENDIAN, STATUS ) ( uint16_t ) qm_fs_file_read_int16( ( FILE ), ( ENDIAN ), ( STATUS ) )
+#	define QM_FS_FILE_READ_UINT32( FILE, ENDIAN, STATUS ) ( uint32_t ) qm_fs_file_read_int32( ( FILE ), ( ENDIAN ), ( STATUS ) )
+#	define QM_FS_FILE_READ_UINT64( FILE, ENDIAN, STATUS ) ( uint64_t ) qm_fs_file_read_int64( ( FILE ), ( ENDIAN ), ( STATUS ) )
 
 float  qm_fs_file_read_float( QmFsFile *ptr, bool big_endian, bool *status );
 double qm_fs_file_read_double( QmFsFile *ptr, bool big_endian, bool *status );

@@ -41,11 +41,40 @@ void PlgGenerateTextureCoordinates( QmGfxMeshVertex *vertices, unsigned int numV
 	}
 }
 
-QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode, unsigned int numTriangles, unsigned int numVertices )
+static void qm_gfx_mesh_destructor( void *ptr )
 {
-	QmGfxMesh *mesh = QM_OS_MEMORY_CALLOC( 1, sizeof( QmGfxMesh ) );
+	QmGfxMesh *mesh = ptr;
+
+	CallGfxFunction( DeleteMesh, mesh );
+
+	qm_os_memory_free( mesh->vertices );
+	qm_os_memory_free( mesh->indices );
+}
+
+QmGfxMesh *qm_gfx_mesh( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode )
+{
+	QmGfxMesh *mesh = QM_OS_MEMORY_NEW_D( QmGfxMesh, qm_gfx_mesh_destructor );
+	if ( mesh == nullptr )
+	{
+		return nullptr;
+	}
+
 	mesh->primitive = primitive;
 	mesh->mode      = mode;
+	mesh->isDirty   = true;
+
+	CallGfxFunction( CreateMesh, mesh );
+
+	return mesh;
+}
+
+QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode, unsigned int numTriangles, unsigned int numVertices )
+{
+	QmGfxMesh *mesh = qm_gfx_mesh( primitive, mode );
+	if ( mesh == nullptr )
+	{
+		return nullptr;
+	}
 
 	if ( numTriangles > 0 )
 	{
@@ -79,25 +108,7 @@ QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode m
 	//TODO: temporary
 	qm_gfx_mesh_set_vertex_layout( mesh, DEFAULT_ATTRIBUTES, NUM_DEFAULT_ATTRIBUTES, sizeof( QmGfxMeshVertex ) );
 
-	mesh->isDirty = true;
-
-	CallGfxFunction( CreateMesh, mesh );
-
 	return mesh;
-}
-
-void qm_gfx_mesh_destroy( QmGfxMesh *mesh )
-{
-	if ( mesh == NULL )
-	{
-		return;
-	}
-
-	CallGfxFunction( DeleteMesh, mesh );
-
-	qm_os_memory_free( mesh->vertices );
-	qm_os_memory_free( mesh->indices );
-	qm_os_memory_free( mesh );
 }
 
 void PlgClearMesh( QmGfxMesh *mesh )

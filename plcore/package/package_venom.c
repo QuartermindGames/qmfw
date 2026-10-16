@@ -20,13 +20,13 @@ QmFsPackage *PlParseVenomPakPackage( QmFsFile *file ) {
 		return NULL;
 	}
 
-	uint32_t headerSize = PL_READUINT32( file, true, NULL );
+	uint32_t headerSize = QM_FS_FILE_READ_UINT32( file, true, NULL );
 	if ( headerSize == 0 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid header size (%u)", headerSize );
 		return NULL;
 	}
 
-	uint32_t numFiles = PL_READUINT32( file, true, NULL );
+	uint32_t numFiles = QM_FS_FILE_READ_UINT32( file, true, NULL );
 	if ( numFiles == 0 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid number of files" );
 		return NULL;

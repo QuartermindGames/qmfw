@@ -17,9 +17,9 @@ static constexpr unsigned int HSM_MAX_VERSION = 1;
 QmImage *qm_image_hsm_parse( QmFsFile *file )
 {
 	bool     status;
-	uint32_t version = PL_READUINT32( file, true, &status );
-	uint32_t width   = PL_READUINT32( file, true, &status );
-	uint32_t height  = PL_READUINT32( file, true, &status );
+	uint32_t version = QM_FS_FILE_READ_UINT32( file, true, &status );
+	uint32_t width   = QM_FS_FILE_READ_UINT32( file, true, &status );
+	uint32_t height  = QM_FS_FILE_READ_UINT32( file, true, &status );
 	if ( !status )
 	{
 		return nullptr;
@@ -44,9 +44,9 @@ QmImage *qm_image_hsm_parse( QmFsFile *file )
 	}
 
 	// not currently sure of these...
-	PL_READUINT32( file, true, &status );
-	PL_READUINT32( file, true, &status );
-	PL_READUINT16( file, true, &status );
+	QM_FS_FILE_READ_UINT32( file, true, &status );
+	QM_FS_FILE_READ_UINT32( file, true, &status );
+	QM_FS_FILE_READ_UINT16( file, true, &status );
 	if ( !status )
 	{
 		return nullptr;

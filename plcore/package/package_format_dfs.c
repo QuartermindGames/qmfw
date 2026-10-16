@@ -84,7 +84,7 @@ QmFsPackage *PlParseDfsPackage_( QmFsFile *file ) {
 	qm_fs_file_read_int32( file, false, NULL );// unknown
 	qm_fs_file_read_int32( file, false, NULL );// unknown
 
-	uint32_t numFiles = PL_READUINT32( file, false, NULL );
+	uint32_t numFiles = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( numFiles <= 0 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid number of files" );
 		return NULL;
@@ -92,7 +92,7 @@ QmFsPackage *PlParseDfsPackage_( QmFsFile *file ) {
 
 	qm_fs_file_read_int32( file, false, NULL );// unknown
 
-	uint32_t stringTableSize = PL_READUINT32( file, false, NULL );
+	uint32_t stringTableSize = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( stringTableSize <= 0 || stringTableSize >= fileSize ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid string table size" );
 		return NULL;
@@ -101,7 +101,7 @@ QmFsPackage *PlParseDfsPackage_( QmFsFile *file ) {
 	qm_fs_file_read_int32( file, false, NULL );// unknown
 	qm_fs_file_read_int32( file, false, NULL );// unknown
 
-	uint32_t stringTableOffset = PL_READUINT32( file, false, NULL );
+	uint32_t stringTableOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( stringTableOffset <= 0 || stringTableOffset >= fileSize ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid string table offset" );
 		return NULL;
@@ -113,10 +113,10 @@ QmFsPackage *PlParseDfsPackage_( QmFsFile *file ) {
 
 	for ( uint32_t i = 0; i < numFiles; ++i ) {
 		// urgh...
-		uint32_t nameOffset = PL_READUINT32( file, false, NULL );
-		uint32_t nameExtendedOffset = PL_READUINT32( file, false, NULL );
-		uint32_t dirOffset = PL_READUINT32( file, false, NULL );
-		uint32_t extensionOffset = PL_READUINT32( file, false, NULL );
+		uint32_t nameOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t nameExtendedOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t dirOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t extensionOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
 
 		char *c = package->files[ i ].name;
 		ReadString( file, &c, stringTableOffset + dirOffset );
@@ -125,8 +125,8 @@ QmFsPackage *PlParseDfsPackage_( QmFsFile *file ) {
 		ReadString( file, &c, stringTableOffset + extensionOffset );
 		qm_os_string_to_lower( package->files[ i ].name, sizeof( package->files[ i ].name ) );
 
-		package->files[ i ].offset = PL_READUINT32( file, false, NULL );
-		package->files[ i ].size = PL_READUINT32( file, false, NULL );
+		package->files[ i ].offset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		package->files[ i ].size = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	}
 
 	return package;

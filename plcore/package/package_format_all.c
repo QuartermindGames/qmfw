@@ -5,7 +5,7 @@
 #include "package_private.h"
 
 QmFsPackage *PlParseAllPackage_( QmFsFile *file ) {
-	uint32_t numFiles = PL_READUINT32( file, false, NULL );
+	uint32_t numFiles = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( numFiles == 0 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid number of files in package" );
 		return NULL;
@@ -14,7 +14,7 @@ QmFsPackage *PlParseAllPackage_( QmFsFile *file ) {
 	// try to validate...
 	for ( unsigned int i = 0; i < 3; ++i ) {
 		bool status;
-		if ( PL_READUINT32( file, false, &status ) == 0 && status ) {
+		if ( QM_FS_FILE_READ_UINT32( file, false, &status ) == 0 && status ) {
 			continue;
 		}
 
@@ -36,7 +36,7 @@ QmFsPackage *PlParseAllPackage_( QmFsFile *file ) {
 	unsigned int offset = qm_fs_file_get_offset( file ) + ( ENTRY_SIZE * numFiles );
 	for ( unsigned int i = 0; i < numFiles; offset += package->files[ i ].size, ++i ) {
 		qm_file_read( file, package->files[ i ].name, sizeof( char ), 64 );
-		package->files[ i ].size = PL_READUINT32( file, false, NULL );
+		package->files[ i ].size = QM_FS_FILE_READ_UINT32( file, false, NULL );
 		package->files[ i ].offset = offset;
 		qm_fs_file_read_int32( file, false, NULL );
 	}

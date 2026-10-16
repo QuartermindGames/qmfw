@@ -119,7 +119,7 @@ void PlgClearInternalMeshes( void )
 			continue;
 		}
 
-		qm_gfx_mesh_destroy( meshes[ i ] );
+		qm_os_memory_free( meshes[ i ] );
 		meshes[ i ] = nullptr;
 	}
 }

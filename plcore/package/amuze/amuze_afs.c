@@ -17,13 +17,13 @@
  */
 
 QmFsPackage *PlParseAfsPackage_( QmFsFile *file ) {
-	uint32_t numFiles = PL_READUINT32( file, false, NULL );
+	uint32_t numFiles = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( numFiles == 0 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid number of files in package" );
 		return NULL;
 	}
 
-	uint32_t version = PL_READUINT32( file, false, NULL );
+	uint32_t version = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( version != 2 ) {
 		PlReportErrorF( PL_RESULT_FILEERR, "invalid version (%u != 2)", version );
 		return NULL;
@@ -40,11 +40,11 @@ QmFsPackage *PlParseAfsPackage_( QmFsFile *file ) {
 	}
 
 	for ( uint32_t i = 0; i < numFiles; ++i ) {
-		package->files[ i ].offset = PL_READUINT32( file, false, NULL );
-		package->files[ i ].size = PL_READUINT32( file, false, NULL );
-		PL_READUINT32( file, false, NULL );//?
-		PL_READUINT32( file, false, NULL );//?
-		PL_READUINT8( file, NULL );        // maybe this was supposed to be string length?? unused if so
+		package->files[ i ].offset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		package->files[ i ].size = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		QM_FS_FILE_READ_UINT32( file, false, NULL );//?
+		QM_FS_FILE_READ_UINT32( file, false, NULL );//?
+		QM_FS_FILE_READ_UINT8( file, NULL );        // maybe this was supposed to be string length?? unused if so
 		qm_file_read( file, package->files[ i ].name, sizeof( char ), 239 );
 		qm_fs_normalize_path( package->files[ i ].name, sizeof( package->files[ i ].name ) );
 	}

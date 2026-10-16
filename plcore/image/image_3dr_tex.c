@@ -8,20 +8,20 @@
 
 QmImage *qm_image_3dr_parse( QmFsFile *file ) {
 	// possibly some sort of image mode? non-zero for alpha textures
-	uint16_t mode = PL_READUINT16( file, false, NULL );
+	uint16_t mode = QM_FS_FILE_READ_UINT16( file, false, NULL );
 	if ( mode != 0 && mode != 0x500 ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "unexpected mode" );
 		return NULL;
 	}
 
-	uint16_t numMipmaps = PL_READUINT16( file, false, NULL );
+	uint16_t numMipmaps = QM_FS_FILE_READ_UINT16( file, false, NULL );
 	if ( numMipmaps == 0 ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "unexpected number of mipmaps" );
 		return NULL;
 	}
 
-	uint16_t width = PL_READUINT16( file, false, NULL );
-	uint16_t height = PL_READUINT16( file, false, NULL );
+	uint16_t width = QM_FS_FILE_READ_UINT16( file, false, NULL );
+	uint16_t height = QM_FS_FILE_READ_UINT16( file, false, NULL );
 	if ( width == 0 || height == 0 ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "invalid image dimensions" );
 		return NULL;
@@ -31,8 +31,8 @@ QmImage *qm_image_3dr_parse( QmFsFile *file ) {
 	qm_fs_file_seek( file, 28, QM_FS_SEEK_CUR );
 
 	// not sure why we've got this again, but make sure it matches for some validation
-	uint16_t w2 = PL_READUINT16( file, false, NULL );
-	uint16_t h2 = PL_READUINT16( file, false, NULL );
+	uint16_t w2 = QM_FS_FILE_READ_UINT16( file, false, NULL );
+	uint16_t h2 = QM_FS_FILE_READ_UINT16( file, false, NULL );
 	if ( w2 != width || h2 != height ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "secondary image dimensions do not match" );
 		return NULL;

@@ -24,7 +24,7 @@ QmFsPackage *PlParseFreshBinPackage_( QmFsFile *file ) {
 		return NULL;
 	}
 
-	unsigned int numFiles = PL_READUINT32( file, false, NULL );
+	unsigned int numFiles = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( numFiles == 0 ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "empty freshengine bin package" );
 		return NULL;
@@ -50,9 +50,9 @@ QmFsPackage *PlParseFreshBinPackage_( QmFsFile *file ) {
 
 		strncpy( package->files[ i ].name, filename, 12 );
 
-		unsigned int blockOffs = PL_READUINT32( file, false, NULL );
+		unsigned int blockOffs = QM_FS_FILE_READ_UINT32( file, false, NULL );
 		package->files[ i ].offset = 2048 * blockOffs;
-		unsigned int size = PL_READUINT32( file, false, NULL );
+		unsigned int size = QM_FS_FILE_READ_UINT32( file, false, NULL );
 		package->files[ i ].size = size;
 	}
 

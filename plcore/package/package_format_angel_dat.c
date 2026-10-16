@@ -27,15 +27,15 @@ typedef struct AngelDATIndex {
 QmFsPackage *PlParseAngelDatPackage_( QmFsFile *file ) {
 	AngelDATHeader header = {};
 
-	header.magic = PL_READUINT32( file, false, NULL );
+	header.magic = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( header.magic != ANGEL_DAT_MAGIC && header.magic != ANGEL_DAT_MAGIC2 ) {
 		PlReportBasicError( PL_RESULT_FILETYPE );
 		return NULL;
 	}
 
-	header.tocIndices = PL_READUINT32( file, false, NULL );
-	header.tocLength = PL_READUINT32( file, false, NULL );
-	header.stringTableLength = PL_READUINT32( file, false, NULL );
+	header.tocIndices = QM_FS_FILE_READ_UINT32( file, false, NULL );
+	header.tocLength = QM_FS_FILE_READ_UINT32( file, false, NULL );
+	header.stringTableLength = QM_FS_FILE_READ_UINT32( file, false, NULL );
 
 	size_t fileSize = qm_fs_file_get_size( file );
 	if ( header.tocLength >= fileSize || header.stringTableLength >= fileSize ) {
@@ -48,10 +48,10 @@ QmFsPackage *PlParseAngelDatPackage_( QmFsFile *file ) {
 
 	AngelDATIndex *indices = QM_OS_MEMORY_NEW_( AngelDATIndex, header.tocIndices );
 	for ( unsigned int i = 0; i < header.tocIndices; ++i ) {
-		indices[ i ].nameOffset = PL_READUINT32( file, false, NULL );
-		indices[ i ].offset = PL_READUINT32( file, false, NULL );
-		indices[ i ].size = PL_READUINT32( file, false, NULL );
-		indices[ i ].compressedSize = PL_READUINT32( file, false, NULL );
+		indices[ i ].nameOffset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		indices[ i ].offset = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		indices[ i ].size = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		indices[ i ].compressedSize = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	}
 
 	/* and now seek to the string table */

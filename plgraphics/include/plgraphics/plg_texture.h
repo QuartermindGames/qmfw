@@ -104,8 +104,8 @@ PL_EXTERN QmGfxTexture *qm_gfx_texture_create( QmGfxTextureType type );
 
 PL_EXTERN bool qm_gfx_texture_upload( QmGfxTexture *self, const QmImage *upload );
 
-PL_EXTERN unsigned int qm_gfx_get_max_texture_size( void );
-PL_EXTERN unsigned int qm_gfx_get_max_texture_units( void );
+PL_EXTERN unsigned int qm_gfx_get_max_texture_size();
+PL_EXTERN unsigned int qm_gfx_get_max_texture_units();
 
 PL_EXTERN void qm_gfx_texture_set_anisotropy( QmGfxTexture *texture, unsigned int amount );
 PL_EXTERN void qm_gfx_texture_set_filter( QmGfxTexture *self, QmGfxTextureFilter filter );

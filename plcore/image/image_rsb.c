@@ -18,15 +18,15 @@ typedef struct RGBA {
 typedef RGBA Palette[ 256 ];
 
 QmImage *qm_image_rsb_parse( QmFsFile *file ) {
-	uint32_t version = PL_READUINT32( file, false, NULL );
+	uint32_t version = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( version < RSB_VERSION_MIN || version > RSB_VERSION_MAX ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "unexpected version (%u)", version );
 		return NULL;
 	}
 
 	// size
-	uint32_t width = PL_READUINT32( file, false, NULL );
-	uint32_t height = PL_READUINT32( file, false, NULL );
+	uint32_t width = QM_FS_FILE_READ_UINT32( file, false, NULL );
+	uint32_t height = QM_FS_FILE_READ_UINT32( file, false, NULL );
 	if ( width == 0 || height == 0 ) {
 		PlReportErrorF( PL_RESULT_FILETYPE, "invalid image dimensions (%ux%u)", width, height );
 		return NULL;
@@ -36,7 +36,7 @@ QmImage *qm_image_rsb_parse( QmFsFile *file ) {
 
 	bool hasPalette = false;
 	if ( version == 0 ) {
-		hasPalette = ( bool ) PL_READUINT32( file, false, NULL );
+		hasPalette = ( bool ) QM_FS_FILE_READ_UINT32( file, false, NULL );
 	}
 
 	if ( hasPalette ) {
@@ -62,10 +62,10 @@ QmImage *qm_image_rsb_parse( QmFsFile *file ) {
 
 		qm_os_memory_free( src );
 	} else {
-		uint32_t r = PL_READUINT32( file, false, NULL );
-		uint32_t g = PL_READUINT32( file, false, NULL );
-		uint32_t b = PL_READUINT32( file, false, NULL );
-		uint32_t a = PL_READUINT32( file, false, NULL );
+		uint32_t r = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t g = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t b = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		uint32_t a = QM_FS_FILE_READ_UINT32( file, false, NULL );
 
 		unsigned int size = width * height;
 		uint16_t *src = QM_OS_MEMORY_NEW_( uint16_t, size );

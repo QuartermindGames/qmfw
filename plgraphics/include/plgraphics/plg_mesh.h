@@ -5,6 +5,8 @@
 #include <plcore/pl_math.h>
 #include <plcore/pl_physics.h>
 
+#include <plgraphics/plg.h>
+
 PL_EXTERN_C
 
 typedef struct QmGfxMesh QmGfxMesh;
@@ -127,8 +129,8 @@ typedef struct QmGfxMesh
 
 #if !defined( PL_COMPILE_PLUGIN )
 
-QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode, unsigned int numTriangles, unsigned int numVertices );
-void       qm_gfx_mesh_destroy( QmGfxMesh *mesh );
+QmGfxMesh                *qm_gfx_mesh( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode );
+[[deprecated]] QmGfxMesh *qm_gfx_mesh_create( QmGfxMeshPrimitive primitive, QmGfxMeshDrawMode mode, unsigned int numTriangles, unsigned int numVertices );
 
 [[deprecated]] void PlgDrawRectangle( float x, float y, float w, float h, QmMathColour4ub colour );
 [[deprecated]] void PlgDrawLineRectangle( float x, float y, float w, float h, QmMathColour4ub colour );
