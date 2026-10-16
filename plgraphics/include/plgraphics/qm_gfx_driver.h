@@ -90,8 +90,8 @@ typedef struct QmGfxDriverImportTable
 
 	// Mesh
 	void ( *CreateMesh )( QmGfxMesh *mesh );
-	void ( *UploadMesh )( QmGfxMesh *mesh, QmGfxShaderProgram *program, const void *vertexPtr, const void *elementsPtr );
-	void ( *DrawMesh )( QmGfxMesh *mesh, QmGfxShaderProgram *program );
+	void ( *UploadMesh )( QmGfxMesh *mesh, QmGfxShaderProgram *program, const void *vertexPtr, unsigned int numVertices, const void *elementsPtr, unsigned int numElements );
+	void ( *DrawMesh )( QmGfxMesh *mesh, QmGfxShaderProgram *program, unsigned int start, unsigned int range );
 	void ( *DrawInstancedMesh )( QmGfxMesh *mesh, QmGfxShaderProgram *program, const PLMatrix4 *transforms, unsigned int instanceCount );
 	void ( *DeleteMesh )( QmGfxMesh *mesh );
 

@@ -88,8 +88,8 @@ void PlgImmDraw( void )
 		}
 	}
 
-	qm_gfx_mesh_upload( currentDynamicMesh, nullptr, nullptr );
-	qm_gfx_mesh_draw( currentDynamicMesh );
+	qm_gfx_mesh_upload( currentDynamicMesh, nullptr, 0, nullptr, 0 );
+	qm_gfx_mesh_draw( currentDynamicMesh, currentDynamicMesh->start, currentDynamicMesh->range );
 }
 
 unsigned int PlgPushTriangle( QmGfxMesh *mesh, unsigned int x, unsigned int y, unsigned int z )

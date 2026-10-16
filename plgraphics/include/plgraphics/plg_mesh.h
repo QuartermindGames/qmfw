@@ -145,9 +145,9 @@ void qm_gfx_mesh_set_primitive_scale( QmGfxMesh *mesh, float scale );
 [[deprecated]] unsigned int PlgAddMeshVertex( QmGfxMesh *mesh, const QmMathVector3f *position, const QmMathVector3f *normal, const QmMathColour4ub *colour, const QmMathVector2f *st );
 [[deprecated]] unsigned int PlgAddMeshTriangle( QmGfxMesh *mesh, unsigned int x, unsigned int y, unsigned int z );
 
-void qm_gfx_mesh_upload( QmGfxMesh *mesh, const void *vertexPtr, const void *elementsPtr );
+void qm_gfx_mesh_upload( QmGfxMesh *mesh, const void *vertexPtr, unsigned int numVertices, const void *elementsPtr, unsigned int numElements );
 
-void qm_gfx_mesh_draw( QmGfxMesh *mesh );
+void qm_gfx_mesh_draw( QmGfxMesh *mesh, unsigned int start, unsigned int range );
 void qm_gfx_mesh_draw_sub( QmGfxMesh *mesh, int32_t *firstSubMeshes, int32_t *subMeshes, uint32_t numSubMeshes );
 void qm_gfx_mesh_draw_instanced( QmGfxMesh *mesh, const PLMatrix4 *transforms, unsigned int instanceCount );
 

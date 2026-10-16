@@ -222,7 +222,7 @@ void xgl_mesh_delete( QmGfxMesh *self )
 	self->driver = nullptr;
 }
 
-void xgl_mesh_upload( QmGfxMesh *self, QmGfxShaderProgram *program, const void *vertexPtr, const void *elementsPtr )
+void xgl_mesh_upload( QmGfxMesh *self, QmGfxShaderProgram *program, const void *vertexPtr, unsigned int numVertices, const void *elementsPtr, unsigned int numElements )
 {
 	if ( !self->isDirty )
 	{
@@ -240,6 +240,9 @@ void xgl_mesh_upload( QmGfxMesh *self, QmGfxShaderProgram *program, const void *
 
 	unsigned int drawMode = xgl_translate_draw_mode( self->mode );
 	assert( drawMode != XGL_INVALID );
+
+	self->num_verts   = numVertices;
+	self->num_indices = numElements;
 
 	// Write the current CPU vertex data into the VBO
 	XGL_CALL( glNamedBufferData( drv->buffers[ XGL_MESH_BUFFER_VERTEX ], ( GLsizei ) ( self->vertexDescriptor.size * self->num_verts ), vertexPtr, drawMode ) );
@@ -311,7 +314,7 @@ void xgl_mesh_draw_instanced( QmGfxMesh *self, QmGfxShaderProgram *program, cons
 	}
 }
 
-void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program )
+void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program, unsigned int start, unsigned int range )
 {
 	XglMesh *drv = self->driver;
 	if ( drv->buffers[ XGL_MESH_BUFFER_VERTEX ] == 0 )
@@ -372,7 +375,7 @@ void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program )
 		}
 		else
 		{
-			XGL_CALL( glDrawElements( mode, self->range, GL_UNSIGNED_INT, ( void * ) ( self->start * sizeof( GLuint ) ) ) );
+			XGL_CALL( glDrawElements( mode, range, GL_UNSIGNED_INT, ( void * ) ( start * sizeof( GLuint ) ) ) );
 		}
 	}
 	else
@@ -383,7 +386,7 @@ void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program )
 		}
 		else
 		{
-			XGL_CALL( glDrawArrays( mode, self->start, self->num_verts ) );
+			XGL_CALL( glDrawArrays( mode, start, range ) );
 		}
 	}
 

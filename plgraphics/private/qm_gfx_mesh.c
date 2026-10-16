@@ -168,14 +168,14 @@ unsigned int PlgAddMeshTriangle( QmGfxMesh *mesh, unsigned int x, unsigned int y
 	return triangleIndex;
 }
 
-void qm_gfx_mesh_upload( QmGfxMesh *mesh, const void *vertexPtr, const void *elementsPtr )
+void qm_gfx_mesh_upload( QmGfxMesh *mesh, const void *vertexPtr, unsigned int numVertices, const void *elementsPtr, unsigned int numElements )
 {
 	CallGfxFunction( UploadMesh, mesh, gfx_state.current_program,
-	                 vertexPtr != nullptr ? vertexPtr : mesh->vertices,
-	                 elementsPtr != nullptr ? elementsPtr : mesh->indices );
+	                 vertexPtr != nullptr ? vertexPtr : mesh->vertices, vertexPtr != nullptr ? numVertices : mesh->num_verts,
+	                 elementsPtr != nullptr ? elementsPtr : mesh->indices, elementsPtr != nullptr ? numElements : mesh->num_indices );
 }
 
-void qm_gfx_mesh_draw( QmGfxMesh *mesh )
+void qm_gfx_mesh_draw( QmGfxMesh *mesh, unsigned int start, unsigned int range )
 {
 	if ( gfx_state.current_program != NULL )
 	{
@@ -190,7 +190,7 @@ void qm_gfx_mesh_draw( QmGfxMesh *mesh )
 		}
 	}
 
-	CallGfxFunction( DrawMesh, mesh, gfx_state.current_program );
+	CallGfxFunction( DrawMesh, mesh, gfx_state.current_program, start, range );
 }
 
 /**
@@ -204,7 +204,7 @@ void qm_gfx_mesh_draw_sub( QmGfxMesh *mesh, int32_t *firstSubMeshes, int32_t *su
 	mesh->firstSubMeshes = firstSubMeshes;
 	mesh->numSubMeshes   = numSubMeshes;
 
-	qm_gfx_mesh_draw( mesh );
+	qm_gfx_mesh_draw( mesh, mesh->start, mesh->range );
 
 	// we can just set it to 0 here, and it won't operate any more...
 	mesh->numSubMeshes = 0;
