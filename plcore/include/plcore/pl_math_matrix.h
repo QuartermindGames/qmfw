@@ -440,6 +440,7 @@ typedef enum PLMatrixMode {
 } PLMatrixMode;
 
 void PlMatrixMode( PLMatrixMode mode );
+PLMatrix4 *qm_math_matrix_stack_get_current();
 PLMatrixMode PlGetMatrixMode( void );
 
 PLMatrix4 *PlGetMatrix( PLMatrixMode mode );

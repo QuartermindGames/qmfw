@@ -204,20 +204,22 @@ QmMathVector3f qm_math_matrix4_get_scale( const PLMatrix4 *self )
  * Matrix Stack, sorta mirrors OpenGL behaviour
  ****************************************/
 
-#define MAX_STACK_SIZE 64
-static PLMatrix4 stacks[ PL_NUM_MATRIX_MODES ][ MAX_STACK_SIZE ];
-static PLMatrixMode curMatrixMode = PL_MODELVIEW_MATRIX;
-static unsigned int curStackSlot[ PL_NUM_MATRIX_MODES ];
+static constexpr unsigned int MAX_STACK_SIZE = 64;
+static PLMatrix4              stacks[ PL_NUM_MATRIX_MODES ][ MAX_STACK_SIZE ];
+static PLMatrixMode           curMatrixMode = PL_MODELVIEW_MATRIX;
+static unsigned int           curStackSlot[ PL_NUM_MATRIX_MODES ];
 
 /**
  * Private function that initializes all of the matrix stacks.
  */
-void PlInitializeMatrixStacks_( void ) {
+void PlInitializeMatrixStacks_()
+{
 	/* make sure all of the slots default to 0 */
 	memset( curStackSlot, 0, sizeof( unsigned int ) * PL_NUM_MATRIX_MODES );
 
 	/* every stack starts off with identity matrix for first slot */
-	for ( unsigned int i = 0; i < PL_NUM_MATRIX_MODES; ++i ) {
+	for ( unsigned int i = 0; i < PL_NUM_MATRIX_MODES; ++i )
+	{
 		stacks[ i ][ 0 ] = PlMatrix4Identity();
 	}
 }
@@ -225,59 +227,77 @@ void PlInitializeMatrixStacks_( void ) {
 /**
  * Returns a pointer to the current matrix stack.
  */
-PLMatrix4 *PlGetMatrix( PLMatrixMode mode ) {
+PLMatrix4 *PlGetMatrix( PLMatrixMode mode )
+{
 	return &stacks[ mode ][ curStackSlot[ mode ] ];
 }
 
-void PlMatrixMode( PLMatrixMode mode ) {
+void PlMatrixMode( PLMatrixMode mode )
+{
 	curMatrixMode = mode;
 }
 
-PLMatrixMode PlGetMatrixMode( void ) {
+PLMatrix4 *qm_math_matrix_stack_get_current()
+{
+	return &stacks[ curMatrixMode ][ curStackSlot[ curMatrixMode ] ];
+}
+
+PLMatrixMode PlGetMatrixMode()
+{
 	return curMatrixMode;
 }
 
-void PlLoadMatrix( const PLMatrix4 *matrix ) {
+void PlLoadMatrix( const PLMatrix4 *matrix )
+{
 	PLMatrix4 *curStack = PlGetMatrix( curMatrixMode );
-	*curStack = *matrix;
+	*curStack           = *matrix;
 }
 
-void PlLoadIdentityMatrix( void ) {
+void PlLoadIdentityMatrix()
+{
 	PLMatrix4 identity = PlMatrix4Identity();
 	PlLoadMatrix( &identity );
 }
 
-void PlMultiMatrix( const PLMatrix4 *matrix ) {
+void PlMultiMatrix( const PLMatrix4 *matrix )
+{
 	PLMatrix4 *curStack = PlGetMatrix( curMatrixMode );
-	*curStack = PlMultiplyMatrix4( curStack, matrix );
+	*curStack           = PlMultiplyMatrix4( curStack, matrix );
 }
 
-void PlRotateMatrix( float angle, const QmMathVector3f *axis ) {
+void PlRotateMatrix( float angle, const QmMathVector3f *axis )
+{
 	PLMatrix4 rotation = PlRotateMatrix4( angle, axis );
 	PlMultiMatrix( &rotation );
 }
 
-void PlRotateMatrix3f( float angle, float x, float y, float z ) {
+void PlRotateMatrix3f( float angle, float x, float y, float z )
+{
 	PlRotateMatrix( angle, &QM_MATH_VECTOR3F( x, y, z ) );
 }
 
-void PlTranslateMatrix( QmMathVector3f vector ) {
+void PlTranslateMatrix( QmMathVector3f vector )
+{
 	PLMatrix4 translate = PlTranslateMatrix4( vector );
 	PlMultiMatrix( &translate );
 }
 
-void PlScaleMatrix( QmMathVector3f scale ) {
+void PlScaleMatrix( QmMathVector3f scale )
+{
 	PLMatrix4 *curStack = PlGetMatrix( curMatrixMode );
-	*curStack = PlScaleMatrix4( *curStack, scale );
+	*curStack           = PlScaleMatrix4( *curStack, scale );
 }
 
-void PlInverseMatrix( void ) {
+void PlInverseMatrix()
+{
 	PLMatrix4 *curStack = PlGetMatrix( curMatrixMode );
-	*curStack = PlInverseMatrix4( curStack );
+	*curStack           = PlInverseMatrix4( curStack );
 }
 
-void PlPushMatrix( void ) {
-	if ( curStackSlot[ curMatrixMode ] >= MAX_STACK_SIZE ) {
+void PlPushMatrix()
+{
+	if ( curStackSlot[ curMatrixMode ] >= MAX_STACK_SIZE )
+	{
 		PlReportBasicError( PL_RESULT_MEMORY_EOA );
 		return;
 	}
@@ -285,11 +305,13 @@ void PlPushMatrix( void ) {
 	PLMatrix4 *curStack = PlGetMatrix( curMatrixMode );
 	curStackSlot[ curMatrixMode ]++;
 	PLMatrix4 *newStack = PlGetMatrix( curMatrixMode );
-	*newStack = *curStack;
+	*newStack           = *curStack;
 }
 
-void PlPopMatrix( void ) {
-	if ( curStackSlot[ curMatrixMode ] == 0 ) {
+void PlPopMatrix()
+{
+	if ( curStackSlot[ curMatrixMode ] == 0 )
+	{
 		PlReportBasicError( PL_RESULT_MEMORY_UNDERFLOW );
 		return;
 	}
