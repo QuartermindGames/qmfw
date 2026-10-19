@@ -34,6 +34,12 @@ extern "C"
 #define QM_MATH_COLOUR3F_G( G ) QM_MATH_COLOUR3F( 1.0f, G, 1.0f )
 #define QM_MATH_COLOUR3F_B( B ) QM_MATH_COLOUR3F( 1.0f, 1.0f, B )
 
+	static constexpr QmMathColour3f QM_MATH_COLOUR3F_WHITE = QM_MATH_COLOUR3F( 1.0f, 1.0f, 1.0f );
+	static constexpr QmMathColour3f QM_MATH_COLOUR3F_BLACK = QM_MATH_COLOUR3F( 0.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour3f QM_MATH_COLOUR3F_RED   = QM_MATH_COLOUR3F( 1.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour3f QM_MATH_COLOUR3F_GREEN = QM_MATH_COLOUR3F( 0.0f, 1.0f, 0.0f );
+	static constexpr QmMathColour3f QM_MATH_COLOUR3F_BLUE  = QM_MATH_COLOUR3F( 0.0f, 0.0f, 1.0f );
+
 	static inline QmMathColour3f qm_math_colour3f( const float r, const float g, const float b )
 	{
 		return QM_MATH_COLOUR3F( r, g, b );
@@ -64,6 +70,12 @@ extern "C"
 #define QM_MATH_COLOUR3F16_G( G ) QM_MATH_COLOUR3F16( 1.0f, G, 1.0f )
 #define QM_MATH_COLOUR3F16_B( B ) QM_MATH_COLOUR3F16( 1.0f, 1.0f, B )
 
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_WHITE = QM_MATH_COLOUR3F16( 1.0f, 1.0f, 1.0f );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLACK = QM_MATH_COLOUR3F16( 0.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_RED   = QM_MATH_COLOUR3F16( 1.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_GREEN = QM_MATH_COLOUR3F16( 0.0f, 1.0f, 0.0f );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLUE  = QM_MATH_COLOUR3F16( 0.0f, 0.0f, 1.0f );
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Colour4f
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +104,12 @@ extern "C"
 #define QM_MATH_COLOUR4F_B( B )         QM_MATH_COLOUR4F( 1.0f, 1.0f, B, 1.0f )
 #define QM_MATH_COLOUR4F_A( A )         QM_MATH_COLOUR4F( 1.0f, 1.0f, 1.0f, A )
 
+	static constexpr QmMathColour4f QM_MATH_COLOUR4F_WHITE = QM_MATH_COLOUR4F_RGB( 1.0f, 1.0f, 1.0f );
+	static constexpr QmMathColour4f QM_MATH_COLOUR4F_BLACK = QM_MATH_COLOUR4F_RGB( 0.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour4f QM_MATH_COLOUR4F_RED   = QM_MATH_COLOUR4F_RGB( 1.0f, 0.0f, 0.0f );
+	static constexpr QmMathColour4f QM_MATH_COLOUR4F_GREEN = QM_MATH_COLOUR4F_RGB( 0.0f, 1.0f, 0.0f );
+	static constexpr QmMathColour4f QM_MATH_COLOUR4F_BLUE  = QM_MATH_COLOUR4F_RGB( 0.0f, 0.0f, 1.0f );
+
 	static inline QmMathColour4f qm_math_colour4f( const float r, const float g, const float b, const float a )
 	{
 		return QM_MATH_COLOUR4F( r, g, b, a );
@@ -118,10 +136,15 @@ extern "C"
 
 #define QM_MATH_COLOUR3UB( R, G, B ) \
 	( QmMathColour3ub ) { .r = ( R ), .g = ( G ), .b = ( B ) }
-#define QM_MATH_COLOUR3UB_RGB( R, G, B ) QM_MATH_COLOUR3UB( R, G, B )
-#define QM_MATH_COLOUR3UB_R( R )         QM_MATH_COLOUR3UB( R, 255, 255 )
-#define QM_MATH_COLOUR3UB_G( G )         QM_MATH_COLOUR3UB( 255, G, 255 )
-#define QM_MATH_COLOUR3UB_B( B )         QM_MATH_COLOUR3UB( 255, 255, B )
+#define QM_MATH_COLOUR3UB_R( R ) QM_MATH_COLOUR3UB( R, 255, 255 )
+#define QM_MATH_COLOUR3UB_G( G ) QM_MATH_COLOUR3UB( 255, G, 255 )
+#define QM_MATH_COLOUR3UB_B( B ) QM_MATH_COLOUR3UB( 255, 255, B )
+
+	static constexpr QmMathColour3ub QM_MATH_COLOUR3UB_WHITE = QM_MATH_COLOUR3UB( 255, 255, 255 );
+	static constexpr QmMathColour3ub QM_MATH_COLOUR3UB_BLACK = QM_MATH_COLOUR3UB( 0, 0, 0 );
+	static constexpr QmMathColour3ub QM_MATH_COLOUR3UB_RED   = QM_MATH_COLOUR3UB( 255, 0, 0 );
+	static constexpr QmMathColour3ub QM_MATH_COLOUR3UB_GREEN = QM_MATH_COLOUR3UB( 0, 255, 0 );
+	static constexpr QmMathColour3ub QM_MATH_COLOUR3UB_BLUE  = QM_MATH_COLOUR3UB( 0, 0, 255 );
 
 	static inline QmMathColour3ub qm_math_colour3ub( const unsigned char r, const unsigned char g, const unsigned char b )
 	{
@@ -155,6 +178,12 @@ extern "C"
 #define QM_MATH_COLOUR4UB_G( G )         QM_MATH_COLOUR4UB( 255, G, 255, 255 )
 #define QM_MATH_COLOUR4UB_B( B )         QM_MATH_COLOUR4UB( 255, 255, B, 255 )
 #define QM_MATH_COLOUR4UB_A( A )         QM_MATH_COLOUR4UB( 255, 255, 255, A )
+
+	static constexpr QmMathColour4ub QM_MATH_COLOUR4UB_WHITE = QM_MATH_COLOUR4UB_RGB( 255, 255, 255 );
+	static constexpr QmMathColour4ub QM_MATH_COLOUR4UB_BLACK = QM_MATH_COLOUR4UB_RGB( 0, 0, 0 );
+	static constexpr QmMathColour4ub QM_MATH_COLOUR4UB_RED   = QM_MATH_COLOUR4UB_RGB( 255, 0, 0 );
+	static constexpr QmMathColour4ub QM_MATH_COLOUR4UB_GREEN = QM_MATH_COLOUR4UB_RGB( 0, 255, 0 );
+	static constexpr QmMathColour4ub QM_MATH_COLOUR4UB_BLUE  = QM_MATH_COLOUR4UB_RGB( 0, 0, 255 );
 
 	static inline QmMathColour4ub qm_math_colour4ub( const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a )
 	{
