@@ -160,23 +160,6 @@ PLCollision PlIsSphereIntersectingPlane( const PLCollisionSphere *sphere, const 
  */
 bool PlIsAabbIntersectingPlane( const PLCollisionAABB *aabb, const PLCollisionPlane *plane, PLCollision *result );
 
-/* https://github.com/erich666/GraphicsGems/blob/master/gemsii/intersect/intsph.c */
-inline static bool PlIsRayIntersectingSphere( const PLCollisionSphere *sphere, const PLCollisionRay *ray, float *enterDistance, float *leaveDistance ) {
-	QmMathVector3f d = qm_math_vector3f_sub( ray->origin, sphere->origin );
-	float u = qm_math_vector3f_dot_product( d, d ) - sphere->radius * sphere->radius;
-	float bsq = qm_math_vector3f_dot_product( d, ray->direction );
-	float disc = bsq * bsq - u;
-
-	if ( disc >= 0.0f ) {
-		float root = sqrtf( disc );
-		*enterDistance = -bsq - root;
-		*leaveDistance = -bsq + root;
-		return true;
-	}
-
-	return false;
-}
-
 bool PlIsRayIntersectingAabb( const PLCollisionAABB *bounds, const PLCollisionRay *ray, QmMathVector3f *hitPoint );
 
 PL_EXTERN_C_END
