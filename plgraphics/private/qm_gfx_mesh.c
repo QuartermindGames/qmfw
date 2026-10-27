@@ -177,6 +177,8 @@ void qm_gfx_mesh_upload( QmGfxMesh *mesh, const void *vertexPtr, unsigned int nu
 
 void qm_gfx_mesh_draw( QmGfxMesh *mesh, unsigned int start, unsigned int range )
 {
+	assert( range != 0 );
+
 	if ( gfx_state.current_program != NULL )
 	{
 		int slot;
