@@ -175,7 +175,7 @@ extern "C"
 	// Zero
 	/////////////////////////////////////////////////////////////////////////////////////
 
-#if ( __STDC_VERSION__ >= 202000L )
+#if ( __STDC_VERSION__ >= 202000L ) || __cplusplus
 	static constexpr QmMathVector2i QM_MATH_VECTOR2I_ZERO = ( QmMathVector2i ) {};
 	static constexpr QmMathVector2f QM_MATH_VECTOR2F_ZERO = ( QmMathVector2f ) {};
 	static constexpr QmMathVector3f QM_MATH_VECTOR3F_ZERO = ( QmMathVector3f ) {};

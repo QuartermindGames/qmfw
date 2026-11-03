@@ -66,15 +66,15 @@ extern "C"
 
 #define QM_MATH_COLOUR3F16( R, G, B ) \
 	( QmMathColour3f16 ) { .r = ( R ), .g = ( G ), .b = ( B ) }
-#define QM_MATH_COLOUR3F16_R( R ) QM_MATH_COLOUR3F16( R, 1.0f, 1.0f )
-#define QM_MATH_COLOUR3F16_G( G ) QM_MATH_COLOUR3F16( 1.0f, G, 1.0f )
-#define QM_MATH_COLOUR3F16_B( B ) QM_MATH_COLOUR3F16( 1.0f, 1.0f, B )
+#define QM_MATH_COLOUR3F16_R( R ) QM_MATH_COLOUR3F16( R, 1.0f16, 1.0f16 )
+#define QM_MATH_COLOUR3F16_G( G ) QM_MATH_COLOUR3F16( 1.0f16, G, 1.0f16 )
+#define QM_MATH_COLOUR3F16_B( B ) QM_MATH_COLOUR3F16( 1.0f16, 1.0f16, B )
 
-	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_WHITE = QM_MATH_COLOUR3F16( 1.0f, 1.0f, 1.0f );
-	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLACK = QM_MATH_COLOUR3F16( 0.0f, 0.0f, 0.0f );
-	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_RED   = QM_MATH_COLOUR3F16( 1.0f, 0.0f, 0.0f );
-	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_GREEN = QM_MATH_COLOUR3F16( 0.0f, 1.0f, 0.0f );
-	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLUE  = QM_MATH_COLOUR3F16( 0.0f, 0.0f, 1.0f );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_WHITE = QM_MATH_COLOUR3F16( 1.0f16, 1.0f16, 1.0f16 );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLACK = QM_MATH_COLOUR3F16( 0.0f16, 0.0f16, 0.0f16 );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_RED   = QM_MATH_COLOUR3F16( 1.0f16, 0.0f16, 0.0f16 );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_GREEN = QM_MATH_COLOUR3F16( 0.0f16, 1.0f16, 0.0f16 );
+	static constexpr QmMathColour3f16 QM_MATH_COLOUR3F16_BLUE  = QM_MATH_COLOUR3F16( 0.0f16, 0.0f16, 1.0f16 );
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// Colour4f
