@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "qmos/public/qm_os_memory.h"
 
@@ -74,6 +75,7 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 
 	// ensure we'll still have room for the header
 	const size_t newAllocSize = newSize + sizeof( QmOsMemoryBlockHeader );
+	const size_t oldAllocSize = header->size;
 
 	// and we'll need to resize from the header pos
 	buf = qmOsMemoryReAllocCallback( header, newAllocSize );
@@ -86,6 +88,12 @@ void *qm_os_memory_realloc( void *ptr, size_t newSize )
 		}
 
 		return nullptr;
+	}
+
+	if ( newSize > oldAllocSize )
+	{
+		// zero the newly allocated block
+		QM_OS_ZERO( buf + sizeof( QmOsMemoryBlockHeader ) + oldAllocSize, newSize - oldAllocSize );
 	}
 
 	header = ( QmOsMemoryBlockHeader * ) buf;
