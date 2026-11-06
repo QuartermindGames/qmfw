@@ -32,23 +32,34 @@ PLHashTable *qm_os_hash_table()
 	return QM_OS_MEMORY_NEW_D( PLHashTable, qm_os_hash_table_destructor );
 }
 
-void PlDestroyHashTableEx( PLHashTable *hashTable, void ( *elementDeleter )( void *user ) ) {
-	if ( hashTable == NULL ) {
-		return;
-	}
-
-	for ( size_t i = 0; i < HASH_TABLE_SIZE; ++i ) {
-		PLHashTableNode *child = hashTable->nodes[ i ];
-		while ( child != NULL ) {
+static void hash_table_clear( PLHashTable *table, void ( *elementDeleter )( void *user ) )
+{
+	for ( size_t i = 0; i < HASH_TABLE_SIZE; ++i )
+	{
+		PLHashTableNode *child = table->nodes[ i ];
+		while ( child != NULL )
+		{
 			PLHashTableNode *next = child->next;
-			if ( elementDeleter != NULL ) {
+			if ( elementDeleter != nullptr )
+			{
 				elementDeleter( child->value );
 			}
 			qm_os_memory_free( child->key );
 			qm_os_memory_free( child );
 			child = next;
 		}
+		table->nodes[ i ] = nullptr;
 	}
+
+	table->numNodes = 0;
+}
+
+void PlDestroyHashTableEx( PLHashTable *hashTable, void ( *elementDeleter )( void *user ) ) {
+	if ( hashTable == NULL ) {
+		return;
+	}
+
+	hash_table_clear( hashTable, elementDeleter );
 
 	qm_os_memory_free( hashTable );
 }
@@ -60,18 +71,7 @@ void PlClearHashTable( PLHashTable *hashTable ) {
 		return;
 	}
 
-	for ( size_t i = 0; i < HASH_TABLE_SIZE; ++i ) {
-		PLHashTableNode *child = hashTable->nodes[ i ];
-		while ( child != NULL ) {
-			PLHashTableNode *next = child->next;
-			qm_os_memory_free( child->key );
-			qm_os_memory_free( child );
-			child = next;
-		}
-		hashTable->nodes[ i ] = NULL;
-	}
-
-	hashTable->numNodes = 0;
+	hash_table_clear( hashTable, nullptr );
 }
 
 PLHashTableNode *PlLookupHashTableNode( const PLHashTable *hashTable, const void *key, size_t keySize ) {
