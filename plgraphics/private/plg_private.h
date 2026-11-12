@@ -28,10 +28,6 @@ typedef struct GfxState
 	bool         current_capabilities[ PLG_GFX_MAX_STATES ];// Enabled capabilities.
 	unsigned int current_textureunit;
 
-	// Textures
-
-	PLGTextureMappingUnit *tmu;
-
 	// Shader states
 
 	QmGfxShaderProgram *current_program;

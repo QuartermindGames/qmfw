@@ -8,17 +8,6 @@
 
 #include <plcore/pl_image.h>
 
-// Texture Environment Modes
-typedef enum PLGTextureEnvironmentMode : uint8_t
-{
-	PLG_TEXTUREMODE_ADD,
-	PLG_TEXTUREMODE_MODULATE,
-	PLG_TEXTUREMODE_DECAL,
-	PLG_TEXTUREMODE_BLEND,
-	PLG_TEXTUREMODE_REPLACE,
-	PLG_TEXTUREMODE_COMBINE
-} PLGTextureEnvironmentMode;
-
 typedef enum QmGfxTextureWrapMode : uint8_t
 {
 	PLG_TEXTURE_WRAP_MODE_REPEAT,
@@ -41,28 +30,11 @@ typedef enum QmGfxTextureFilter : uint8_t
 	PLG_MAX_TEXTURE_FILTER_MODES
 } QmGfxTextureFilter;
 
-typedef enum PLGTextureTarget
-{
-	PLG_TEXTURE_1D,
-	PLG_TEXTURE_2D,
-	PLG_TEXTURE_3D
-} PLGTextureTarget;
-
 enum PLGTextureFlag
 {
 	PLG_TEXTURE_FLAG_PRESERVE = ( 1 << 1 ),
 	PLG_TEXTURE_FLAG_NOMIPS   = ( 1 << 2 ),
 };
-
-typedef struct PLGTextureMappingUnit
-{
-	bool active;
-
-	unsigned int current_texture;
-	unsigned int current_capabilities;
-
-	PLGTextureEnvironmentMode current_envmode;
-} PLGTextureMappingUnit;
 
 typedef enum QmGfxTextureType
 {

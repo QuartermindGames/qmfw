@@ -27,8 +27,6 @@ void PlgShutdownGraphics( void )
 {
 	PlgClearInternalMeshes();
 
-	qm_os_memory_free( gfx_state.tmu );
-
 	CallGfxFunction( Shutdown );
 }
 
