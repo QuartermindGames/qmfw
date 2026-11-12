@@ -1,28 +1,34 @@
-// SPDX-License-Identifier: MIT
-// Copyright © 2017-2023 Mark E Sowden <hogsy@oldtimes-software.com>
+// Copyright © 2017-2026 Quartermind Games, Mark E. Sowden <markelswo@gmail.com>
+// Purpose: Zip file loader.
+// Author:  Mark E. Sowden
 
 #include <plcore/pl_linkedlist.h>
 
 #include "package_private.h"
-#include "qmos/public/qm_os_memory.h"
 
 /*
  * todo:
  * 	- zip64 support is currently missing
  */
 
-#define ZIP_FILE_MAGIC QM_OS_MAGIC_TO_NUM( 'P', 'K', '\3', '\4' )
+static constexpr unsigned int ZIP_FILE_MAGIC   = QM_OS_MAGIC_TO_NUM( 'P', 'K', '\3', '\4' );
+static constexpr unsigned int ZIP_CD_MAGIC     = 0x02014b50;
+static constexpr unsigned int ZIP_CD_END_MAGIC = QM_OS_MAGIC_TO_NUM( 'P', 'K', '\5', '\6' );
 
 #define ZIP_EXCLUDE_DIRS
 
-typedef enum ZipCompression {
-	ZIP_COMPRESSION_NONE = 0,
+typedef enum ZipCompression
+{
+	ZIP_COMPRESSION_NONE     = 0,
 	ZIP_COMPRESSION_IMPLODED = 6,
 	ZIP_COMPRESSION_DEFLATED = 8,
-	ZIP_COMPRESSION_LZMA = 14,
+	ZIP_COMPRESSION_LZMA     = 14,
 } ZipCompression;
 
-typedef struct ZipFileHeader {
+#pragma pack( push, 1 )
+
+typedef struct ZipFileHeader
+{
 	uint32_t magic;
 	uint16_t version;
 	uint16_t flags;
@@ -34,121 +40,158 @@ typedef struct ZipFileHeader {
 	uint32_t uncompressedSize;
 	uint16_t nameSize;
 	uint16_t extraSize;
-
-	PLFileOffset offset;
-
-	char *name;
-	void *extra;
 } ZipFileHeader;
 
-static bool ParseZipFileHeader( QmFsFile *file, ZipFileHeader *header ) {
-	header->magic = qm_fs_file_read_int32( file, false, NULL );
-	if ( header->magic != ZIP_FILE_MAGIC ) {
-		PlReportErrorF( PL_RESULT_FILETYPE, "invalid magic: %X", header->magic );
-		return false;
-	}
+typedef struct ZipCDHeader
+{
+	uint32_t magic;
+	uint16_t versionBy;
+	uint16_t versionReq;
+	uint16_t flags;
+	uint16_t compression;
+	uint16_t modificationTime;
+	uint16_t modificationDate;
+	uint32_t checksum;
+	uint32_t compressedSize;
+	uint32_t uncompressedSize;
+	uint16_t nameSize;
+	uint16_t extraSize;
+	uint16_t commentSize;
+	uint16_t diskNoStart;
+	uint16_t fileAttributes;
+	uint32_t externalFileAttributes;
+	uint32_t offset;
+} ZipCDHeader;
 
-	header->version = qm_fs_file_read_int16( file, false, NULL );
-	header->flags = qm_fs_file_read_int16( file, false, NULL );
-	header->compression = qm_fs_file_read_int16( file, false, NULL );
-	header->modificationTime = qm_fs_file_read_int16( file, false, NULL );
-	header->modificationDate = qm_fs_file_read_int16( file, false, NULL );
-	header->checksum = qm_fs_file_read_int32( file, false, NULL );
-	header->compressedSize = qm_fs_file_read_int32( file, false, NULL );
-	header->uncompressedSize = qm_fs_file_read_int32( file, false, NULL );
+typedef struct ZipCDEndHeader
+{
+	uint32_t magic;
+	uint16_t numOfDisk;
+	uint16_t numOfStart;
+	uint16_t totalEntriesDisk;
+	uint16_t totalEntries;
+	uint32_t size;
+	uint32_t offset;
+	uint16_t commentSize;
+} ZipCDEndHeader;
 
-	header->nameSize = qm_fs_file_read_int16( file, false, NULL );
-	header->name = QM_OS_MEMORY_NEW_( char, header->nameSize + 1 );
+#pragma pack( pop )
 
-	header->extraSize = qm_fs_file_read_int16( file, false, NULL );
-	header->extra = QM_OS_MEMORY_NEW_( char, header->extraSize );
-
-	qm_file_read( file, header->name, sizeof( char ), header->nameSize );
-	qm_file_read( file, header->extra, sizeof( char ), header->extraSize );
-
-	header->offset = qm_fs_file_get_offset( file );
-
-	qm_fs_file_seek( file, header->compressedSize, QM_FS_SEEK_CUR );
-
-	return true;
-}
-
-QmFsPackage *PlParseZipPackage( QmFsFile *file ) {
+QmFsPackage *PlParseZipPackage( QmFsFile *file )
+{
 	/* check this first, just to be sure it's indicated
 	 * that it's actually a zip file */
 	uint32_t magic = qm_fs_file_read_int32( file, false, NULL );
-	if ( magic != ZIP_FILE_MAGIC ) {
+	if ( magic != ZIP_FILE_MAGIC )
+	{
 		PlReportErrorF( PL_RESULT_FILETYPE, "invalid magic: %X", magic );
 		return NULL;
 	}
 
-	qm_fs_file_rewind( file );
+	// try to iterate backwards to find the dumb end CD thing
+	PLFileOffset offset = qm_fs_file_get_size( file ) - 4;
+	for ( ;; offset-- )
+	{
+		if ( !qm_fs_file_seek( file, offset, QM_FS_SEEK_SET ) )
+		{
+			return NULL;
+		}
 
-	PLLinkedList *files = PlCreateLinkedList();
-
-	while ( true ) {
-		ZipFileHeader *store = QM_OS_MEMORY_NEW( ZipFileHeader );
-		if ( !ParseZipFileHeader( file, store ) ) {
-			qm_os_memory_free( store );
+		magic = QM_FS_FILE_READ_UINT32( file, false, NULL );
+		if ( magic == ZIP_CD_END_MAGIC )
+		{
 			break;
 		}
-
-#if defined( ZIP_EXCLUDE_DIRS )
-		/* couldn't see any defined way to determine type for a zip
-		 * 'file' - and some zips store indices representing directories
-		 * which is great, but we're not specifically interested in these */
-		const char *c = &store->name[ store->nameSize - 1 ];
-		if ( *c == '/' || *c == '\\' ) {
-			qm_os_memory_free( store );
-			continue;
-		}
-#endif
-
-		PlInsertLinkedListNode( files, store );
 	}
 
-	unsigned int numFiles = PlGetNumLinkedListNodes( files );
-	QmFsPackage *package = PlCreatePackageHandle( qm_fs_file_get_path( file ), numFiles, NULL );
+	qm_fs_file_seek( file, offset, QM_FS_SEEK_SET );
 
-	PLLinkedListNode *node = PlGetFirstNode( files );
-	for ( unsigned int i = 0; i < numFiles; ++i ) {
-		ZipFileHeader *store = PlGetLinkedListNodeUserData( node );
-		package->files[ i ].compressedSize = store->compressedSize;
-		package->files[ i ].size = store->uncompressedSize;
-		package->files[ i ].offset = store->offset;
-
-		snprintf( package->files[ i ].name, sizeof( package->files[ i ].name ), "%s", store->name );
-
-		switch ( store->compression ) {
-			case ZIP_COMPRESSION_DEFLATED:
-				package->files[ i ].compressionType = PL_COMPRESSION_DEFLATE;
-				break;
-			case ZIP_COMPRESSION_IMPLODED:
-				package->files[ i ].compressionType = PL_COMPRESSION_IMPLODE;
-				break;
-			case ZIP_COMPRESSION_NONE:
-				package->files[ i ].compressionType = PL_COMPRESSION_NONE;
-				break;
-			default:
-				package->files[ i ].compressionType = PL_COMPRESSION_UNKNOWN;
-				break;
-		}
-
-		qm_os_memory_free( store->name );
-		qm_os_memory_free( store->extra );
-		qm_os_memory_free( store );
-
-		node = PlGetNextLinkedListNode( node );
+	ZipCDEndHeader endHeader;
+	qm_file_read( file, &endHeader, sizeof( endHeader ), 1 );
+	if ( !qm_fs_file_seek( file, endHeader.offset, QM_FS_SEEK_SET ) )
+	{
+		return NULL;
 	}
 
-	PlDestroyLinkedList( files );
+	ZipCDHeader *cdHeaders = QM_OS_MEMORY_NEW_( ZipCDHeader, endHeader.totalEntries );
+	if ( cdHeaders == NULL )
+	{
+		return NULL;
+	}
+
+	QmFsPackage *package = PlCreatePackageHandle( qm_fs_file_get_path( file ), endHeader.totalEntries, NULL );
+	if ( package != NULL )
+	{
+		unsigned int pi = 0;
+		for ( unsigned int i = 0; i < endHeader.totalEntries; ++i )
+		{
+			ZipCDHeader *cdHeader = &cdHeaders[ i ];
+			qm_file_read( file, cdHeader, sizeof( ZipCDHeader ), 1 );
+
+			char *name = QM_OS_MEMORY_NEW_( char, cdHeader->nameSize + 1 );
+			qm_file_read( file, name, sizeof( char ), cdHeader->nameSize );
+
+			/* couldn't see any defined way to determine type for a zip
+			 * 'file' - and some zips store indices representing directories
+			 * which is great, but we're not specifically interested in these */
+			if ( !( cdHeader->compressedSize == 0 && cdHeader->uncompressedSize == 0 ) )
+			{
+				// copy everything into the new package table
+				snprintf( package->files[ pi ].name, sizeof( package->files[ pi ].name ), "%s", name );
+				package->files[ pi ].compressedSize = cdHeader->compressedSize;
+				package->files[ pi ].size           = cdHeader->uncompressedSize;
+
+				switch ( cdHeader->compression )
+				{
+					case ZIP_COMPRESSION_DEFLATED:
+						package->files[ pi ].compressionType = PL_COMPRESSION_GZIP;
+						break;
+					case ZIP_COMPRESSION_IMPLODED:
+						package->files[ pi ].compressionType = PL_COMPRESSION_IMPLODE;
+						break;
+					case ZIP_COMPRESSION_NONE:
+						package->files[ pi ].compressionType = PL_COMPRESSION_NONE;
+						break;
+					default:
+						package->files[ pi ].compressionType = PL_COMPRESSION_UNKNOWN;
+						break;
+				}
+
+				// did I mention how much I hate this format?
+				// apparently the extra size isn't guaranteed to be the same between the cd table and the files...
+
+				offset = qm_fs_file_get_offset( file );
+				qm_fs_file_seek( file, cdHeader->offset, QM_FS_SEEK_SET );
+
+				ZipFileHeader fileHeader;
+				qm_file_read( file, &fileHeader, sizeof( ZipFileHeader ), 1 );
+				package->files[ pi ].offset = cdHeader->offset + sizeof( ZipFileHeader ) + fileHeader.nameSize + fileHeader.extraSize;
+
+				qm_fs_file_seek( file, offset, QM_FS_SEEK_SET );
+				pi++;
+			}
+
+			qm_os_memory_free( name );
+
+			// we don't support these others, so just skip 'em
+			qm_fs_file_seek( file, cdHeader->extraSize + cdHeader->commentSize, QM_FS_SEEK_CUR );
+		}
+
+		// we may have excluded directories from the target, so amend
+		//TODO: do we want to bother resizing the table?
+		package->numFiles = pi;
+	}
+
+	qm_os_memory_free( cdHeaders );
 
 	return package;
 }
 
-QmFsPackage *PlLoadZipPackage( const char *path ) {
+QmFsPackage *PlLoadZipPackage( const char *path )
+{
 	QmFsFile *file = qm_fs_file_open( path, false );
-	if ( file == NULL ) {
+	if ( file == NULL )
+	{
 		return NULL;
 	}
 
