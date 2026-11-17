@@ -1891,5 +1891,11 @@ const QmGfxDriverImportTable qm_gfx_xglInterface_ = {
         .StencilBufferFunction = xgl_stencil_function,
         .StencilOp             = xgl_stencil_op,
 
+        .createOcclusionQuery    = xgl_occlusion_query_create,
+        .destroyOcclusionQuery   = xgl_occlusion_query_destroy,
+        .beginOcclusionQuery     = xgl_occlusion_query_begin,
+        .endOcclusionQuery       = xgl_occlusion_query_end,
+        .getOcclusionQueryResult = xgl_occlusion_query_get_result,
+
         .SetClipPlane = xgl_set_clip_plane,
 };

@@ -7,6 +7,7 @@ if (QM_GFX_OPENGL)
             private/driver_opengl/3rdparty/glew-2.2.0/src/glew.c
             private/driver_opengl/xgl.c
             private/driver_opengl/xgl_mesh.c
+            private/driver_opengl/xgl_occlusion.c
     )
     set(QM_GFX_DEFINITIONS ${QM_GFX_DEFINITIONS}
             QM_GFX_OPENGL=1
@@ -33,6 +34,7 @@ add_library(plgraphics STATIC
         private/qm_gfx_driver.c
         private/qm_gfx_framebuffer.c
         private/qm_gfx_mesh.c
+        private/qm_gfx_occlusion.c
         private/qm_gfx_shader.c
 
         ${QM_GFX_OPENGL_SOURCES}

@@ -14,6 +14,11 @@ static constexpr int QM_GFX_RESULT_SUCCESS = 0;
 
 typedef struct QmGfxDriverImportTable QmGfxDriverImportTable;
 
+typedef struct QmGfxOcclusionQuery
+{
+	void *driver;
+} QmGfxOcclusionQuery;
+
 typedef enum PLGCullMode
 {
 	PLG_CULL_NONE, /* disables backface culling */

@@ -150,6 +150,13 @@ typedef struct QmGfxDriverImportTable
 	void ( *SetTextureWrapMode )( QmGfxTexture *texture, QmGfxTextureWrapMode wrapMode );
 
 	void ( *SetClipPlane )( const QmMathVector4f *clipPlane, const PLMatrix4 *clipPlaneMatrix, bool transpose );
+
+	// occlusion
+	void ( *createOcclusionQuery )( QmGfxOcclusionQuery *query );
+	void ( *destroyOcclusionQuery )( QmGfxOcclusionQuery *query );
+	bool ( *beginOcclusionQuery )( QmGfxOcclusionQuery *query );
+	void ( *endOcclusionQuery )( QmGfxOcclusionQuery *query );
+	bool ( *getOcclusionQueryResult )( QmGfxOcclusionQuery *query );
 } QmGfxDriverImportTable;
 
 #if !defined( PL_COMPILE_PLUGIN )

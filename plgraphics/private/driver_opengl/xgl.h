@@ -99,3 +99,11 @@ void xgl_mesh_draw_instanced( QmGfxMesh *self, QmGfxShaderProgram *program, cons
 void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program, unsigned int start, unsigned int range );
 
 /////////////////////////////////////////////////////////////
+// Occlusion
+
+void xgl_occlusion_query_create( QmGfxOcclusionQuery *self );
+void xgl_occlusion_query_destroy( QmGfxOcclusionQuery *self );
+
+bool xgl_occlusion_query_begin( QmGfxOcclusionQuery *self );
+void xgl_occlusion_query_end( [[maybe_unused]] QmGfxOcclusionQuery *self );
+bool xgl_occlusion_query_get_result( QmGfxOcclusionQuery *self );
