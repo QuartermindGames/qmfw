@@ -58,16 +58,5 @@ PLFunctionResult qm_gfx_driver_set( const unsigned int mode )
 		return result;
 	}
 
-	//TODO: do we still need this other crap??
-
-	qm_os_memory_free( gfx_state.tmu );
-
-	const unsigned int numUnits = qm_gfx_get_max_texture_units();
-	gfx_state.tmu               = ( PLGTextureMappingUnit * ) QM_OS_MEMORY_CALLOC( numUnits, sizeof( PLGTextureMappingUnit ) );
-	for ( unsigned int i = 0; i < numUnits; i++ )
-	{
-		gfx_state.tmu[ i ].current_envmode = PLG_TEXTUREMODE_REPLACE;
-	}
-
 	return PL_RESULT_SUCCESS;
 }
