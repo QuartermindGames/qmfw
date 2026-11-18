@@ -131,6 +131,7 @@ enum
 #define QM_OS_ZERO_( DATA )      memset( &( DATA ), 0, sizeof( ( DATA ) ) )
 
 #define QM_OS_SET_ARRAY( DATA, VALUE, ELEMENTS ) memset( ( DATA ), ( VALUE ), sizeof( typeof( *( DATA ) ) ) * ( ELEMENTS ) )
+#define QM_OS_SET_ARRAY_( DATA, VALUE )          memset( ( DATA ), ( VALUE ), sizeof( typeof( *( DATA ) ) ) * ( sizeof( DATA ) / sizeof( *( DATA ) ) ) )
 #define QM_OS_ZERO_ARRAY( DATA, ELEMENTS )       QM_OS_SET_ARRAY( DATA, 0, ELEMENTS )
 
 #define QM_OS_STRINGIFY( NUM ) #NUM
