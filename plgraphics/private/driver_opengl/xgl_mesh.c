@@ -336,11 +336,6 @@ void xgl_mesh_draw( QmGfxMesh *self, QmGfxShaderProgram *program, unsigned int s
 		const QmMathVector4f *clipPlane = xgl_get_clip_plane();
 		XGL_CALL( glUniform4fv( slot, 1, ( float * ) &clipPlane ) );
 	}
-	if ( ( slot = ( ( XglShaderProgram * ) program->driver )->defaultUniforms[ XGL_SHADER_UNIFORM_TYPE_CLIP_PLANE_MATRIX ] ) != XGL_INVALID )
-	{
-		const PLMatrix4 *clipMatrix = xgl_get_clip_matrix();
-		XGL_CALL( glUniformMatrix4fv( slot, 1, GL_FALSE, clipMatrix->m ) );
-	}
 #endif
 
 	if ( self->primitiveScale != 0.0f )

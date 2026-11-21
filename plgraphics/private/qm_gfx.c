@@ -173,9 +173,9 @@ void PlgStencilOp( PLGStencilFace face, PLGStencilOp stencilFailOp, PLGStencilOp
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-void qm_gfx_set_clip_plane( const QmMathVector4f *clip, const PLMatrix4 *clipMatrix, bool transpose )
+void qm_gfx_set_clip_plane( const QmMathVector4f *clip )
 {
-	CallGfxFunction( SetClipPlane, clip, clipMatrix, transpose );
+	CallGfxFunction( setClipPlane, clip );
 }
 
 /***** TEMPORARY CRAP START *****/

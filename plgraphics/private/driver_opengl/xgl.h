@@ -34,7 +34,6 @@ extern const PLGDriverExportTable *gInterface;
 static constexpr unsigned int XGL_INVALID = ( unsigned int ) -1;
 
 const QmMathVector4f *xgl_get_clip_plane();
-const PLMatrix4      *xgl_get_clip_matrix();
 
 typedef struct XglTexture
 {
@@ -52,7 +51,6 @@ typedef enum XglShaderUniformType : unsigned int
 	XGL_SHADER_UNIFORM_TYPE_PROJECTION_MATRIX,
 	XGL_SHADER_UNIFORM_TYPE_TEXTURE_MATRIX,
 	XGL_SHADER_UNIFORM_TYPE_CLIP_PLANE,
-	XGL_SHADER_UNIFORM_TYPE_CLIP_PLANE_MATRIX,
 	XGL_SHADER_UNIFORM_TYPE_MAX
 } XglShaderUniformType;
 

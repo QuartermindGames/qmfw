@@ -149,7 +149,7 @@ typedef struct QmGfxDriverImportTable
 	// v3.2
 	void ( *SetTextureWrapMode )( QmGfxTexture *texture, QmGfxTextureWrapMode wrapMode );
 
-	void ( *SetClipPlane )( const QmMathVector4f *clipPlane, const PLMatrix4 *clipPlaneMatrix, bool transpose );
+	void ( *setClipPlane )( const QmMathVector4f *clipPlane );
 
 	// occlusion
 	void ( *createOcclusionQuery )( QmGfxOcclusionQuery *query );

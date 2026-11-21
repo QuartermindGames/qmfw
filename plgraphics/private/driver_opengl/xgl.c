@@ -897,9 +897,8 @@ static void xgl_texture_set_wrap( QmGfxTexture *self, QmGfxTextureWrapMode wrapM
 /////////////////////////////////////////////////////////////
 
 static QmMathVector4f clipPlane;
-static PLMatrix4      clipPlaneMatrix;
 
-static void xgl_set_clip_plane( const QmMathVector4f *clip, const PLMatrix4 *transform, bool transpose )
+static void xgl_set_clip_plane( const QmMathVector4f *clip )
 {
 	if ( clip == nullptr )
 	{
@@ -909,22 +908,11 @@ static void xgl_set_clip_plane( const QmMathVector4f *clip, const PLMatrix4 *tra
 
 	glEnable( GL_CLIP_DISTANCE0 );
 	clipPlane = *clip;
-
-	clipPlaneMatrix = transform != nullptr ? *transform : PlMatrix4Identity();
-	if ( transpose )
-	{
-		clipPlaneMatrix = PlTransposeMatrix4( &clipPlaneMatrix );
-	}
 }
 
 const QmMathVector4f *xgl_get_clip_plane()
 {
 	return &clipPlane;
-}
-
-const PLMatrix4 *xgl_get_clip_matrix()
-{
-	return &clipPlaneMatrix;
 }
 
 /////////////////////////////////////////////////////////////
@@ -1357,7 +1345,6 @@ static void xgl_shader_program_register_data( QmGfxShaderProgram *self )
 	XGL_CALL( drv->defaultUniforms[ XGL_SHADER_UNIFORM_TYPE_PROJECTION_MATRIX ] = ( unsigned int ) glGetUniformLocation( drv->id, "pl_proj" ) );
 	XGL_CALL( drv->defaultUniforms[ XGL_SHADER_UNIFORM_TYPE_TEXTURE_MATRIX ] = ( unsigned int ) glGetUniformLocation( drv->id, "pl_texture" ) );
 	XGL_CALL( drv->defaultUniforms[ XGL_SHADER_UNIFORM_TYPE_CLIP_PLANE ] = ( unsigned int ) glGetUniformLocation( drv->id, "pl_clipplane" ) );
-	XGL_CALL( drv->defaultUniforms[ XGL_SHADER_UNIFORM_TYPE_CLIP_PLANE_MATRIX ] = ( unsigned int ) glGetUniformLocation( drv->id, "pl_clipplane_matrix" ) );
 
 	int numUniforms = 0;
 	XGL_CALL( glGetProgramiv( drv->id, GL_ACTIVE_UNIFORMS, &numUniforms ) );
@@ -1897,5 +1884,5 @@ const QmGfxDriverImportTable qm_gfx_xglInterface_ = {
         .endOcclusionQuery       = xgl_occlusion_query_end,
         .getOcclusionQueryResult = xgl_occlusion_query_get_result,
 
-        .SetClipPlane = xgl_set_clip_plane,
+        .setClipPlane = xgl_set_clip_plane,
 };
