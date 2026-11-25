@@ -4,7 +4,8 @@
 
 # qmfw
 
-A C23 framework for games, software and everything in-between.
+A C23 framework for games, software and everything in-between.<br>
+By **Humans**, for **Humans**.
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FTalonBraveInfo%2Fplatform.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FTalonBraveInfo%2Fplatform?ref=badge_shield)
 [![CodeFactor](https://www.codefactor.io/repository/github/quartermindgames/hei/badge)](https://www.codefactor.io/repository/github/quartermindgames/hei)
