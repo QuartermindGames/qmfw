@@ -30,6 +30,13 @@ extern "C"
 	char *qm_os_string_split( const char *s, size_t size, const char *sep );
 
 	/**
+	 * Replaces the specific part of the string.
+	 * If the insert goes beyond the end of the existing string, it will be null terminated.
+	 * If the insert doesn't fit in the destination, the function returns null.
+	 */
+	char *qm_os_string_replace( char *dst, size_t size, const char *find, const char *insert );
+
+	/**
 	 * Similar to strscpy on Linux; copies a string into the destination
 	 * buffer and returns the number of bytes copied (excluding null terminator).
 	 * Destination is always null terminated.

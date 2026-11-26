@@ -157,9 +157,12 @@ QM_TEST_FUNC( string )
 	QM_TEST_ASSERT( buf != nullptr );
 	QM_TEST_ASSERT( strcmp( buf, "Hello World! Hello to you!" ) == 0 );
 
-	char tmp[ 8 ];
-	qm_os_string_convert_int( 128, tmp, sizeof( tmp ), 10 );
-	QM_TEST_ASSERT( strcmp( tmp, "128" ) == 0 );
+	// convert
+	{
+		char tmp[ 8 ];
+		qm_os_string_convert_int( 128, tmp, sizeof( tmp ), 10 );
+		QM_TEST_ASSERT( strcmp( tmp, "128" ) == 0 );
+	}
 
 	size_t size = strlen( buf );
 	if ( qm_os_string_count( buf, 'H', size ) != 2 )
@@ -182,6 +185,8 @@ QM_TEST_FUNC( string )
 	qm_os_string_to_lower( buf, size );
 	QM_TEST_ASSERT( strncmp( buf, "!uoy ot olleh !dlrow olleh", 12 ) == 0 );
 
+	// copy
+	char tmp[ 8 ];
 	QM_TEST_ASSERT( qm_os_string_copy( tmp, "Hello world, how're you?", sizeof( tmp ) ) == 7 );
 	QM_TEST_ASSERT( strcmp( tmp, "Hello w" ) == 0 );
 	QM_TEST_ASSERT( qm_os_string_copy( buf, "Hello world, how're you?", size ) == 24 );
@@ -192,6 +197,18 @@ QM_TEST_FUNC( string )
 	QM_TEST_ASSERT( strcmp( buf, "H" ) == 0 );
 
 	qm_os_memory_free( buf );
+}
+QM_TEST_FUNC_END()
+
+QM_TEST_FUNC( string_replace )
+{
+	char tmp[ 64 ];
+	snprintf( tmp, sizeof( tmp ), "Hello world, how's it going?" );
+	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "Hello", "Goodbye" ) != nullptr );
+	QM_TEST_ASSERT( strcmp( tmp, "Goodbyeorld, how's it going?" ) == 0 );
+	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "going?", "going and going!" ) != nullptr );
+	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "Goodbye", "Hello w" ) != nullptr );
+	QM_TEST_ASSERT( strcmp( tmp, "Hello world, how's it going and going!" ) == 0 );
 }
 QM_TEST_FUNC_END()
 
@@ -213,6 +230,7 @@ int main( int, char ** )
 	CALL_FUNC_TEST( random )
 	CALL_FUNC_TEST( shared_ptr )
 	CALL_FUNC_TEST( string )
+	CALL_FUNC_TEST( string_replace )
 	CALL_FUNC_TEST( time )
 	TEST_RUN_END
 }

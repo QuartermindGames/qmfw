@@ -222,6 +222,30 @@ char *qm_os_string_split( const char *s, const size_t size, const char *sep )
 	return dest;
 }
 
+char *qm_os_string_replace( char *dst, const size_t size, const char *find, const char *insert )
+{
+	const size_t dstLen    = strlen( dst );
+	const size_t insertLen = strlen( insert );
+	if ( dstLen + insertLen >= size )
+	{
+		return nullptr;
+	}
+
+	char *p = strstr( dst, find );
+	if ( p == nullptr )
+	{
+		return nullptr;
+	}
+
+	p = strncpy( p, insert, insertLen );
+	if ( p != nullptr && dst - p + insertLen > dstLen )
+	{
+		*( p + insertLen ) = '\0';
+	}
+
+	return p;
+}
+
 size_t qm_os_string_copy( char *dst, const char *src, const size_t size )
 {
 	if ( size == 0 )
