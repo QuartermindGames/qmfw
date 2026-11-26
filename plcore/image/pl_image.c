@@ -154,9 +154,34 @@ void PlClearImageLoaders( void ) {
 	numImageLoaders = 0;
 }
 
-QmImage *PlCreateImage( const void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat ) {
-	QmImage *image = QM_OS_MEMORY_MALLOC_( sizeof( QmImage ) );
-	if ( image == NULL ) {
+static void image_destroy( void *ptr )
+{
+	QmImage *image = ptr;
+
+	/* todo: kill this */
+	for ( unsigned int levels = 0; levels < image->levels; ++levels )
+	{
+		qm_os_memory_free( image->data[ levels ] );
+	}
+
+	for ( unsigned int i = 0; i < image->numFrames; ++i )
+	{
+		for ( unsigned int j = 0; j < image->frames[ i ].numMips; ++j )
+		{
+			qm_os_memory_free( image->frames[ i ].data[ j ] );
+		}
+		qm_os_memory_free( image->frames[ i ].data );
+	}
+	qm_os_memory_free( image->frames );
+
+	qm_os_memory_free( image->data );
+}
+
+QmImage *PlCreateImage( const void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat )
+{
+	QmImage *image = QM_OS_MEMORY_NEW_D( QmImage, image_destroy );
+	if ( image == NULL )
+	{
 		return NULL;
 	}
 
@@ -194,25 +219,13 @@ QmImage *PlCreateImage( const void *buf, unsigned int w, unsigned int h, unsigne
 	return image;
 }
 
-void PlDestroyImage( QmImage *image ) {
-	if ( image == NULL ) {
+void PlDestroyImage( QmImage *image )
+{
+	if ( image == NULL )
+	{
 		return;
 	}
 
-	/* todo: kill this */
-	for ( unsigned int levels = 0; levels < image->levels; ++levels ) {
-		qm_os_memory_free( image->data[ levels ] );
-	}
-
-	for ( unsigned int i = 0; i < image->numFrames; ++i ) {
-		for ( unsigned int j = 0; j < image->frames[ i ].numMips; ++j ) {
-			qm_os_memory_free( image->frames[ i ].data[ j ] );
-		}
-		qm_os_memory_free( image->frames[ i ].data );
-	}
-	qm_os_memory_free( image->frames );
-
-	qm_os_memory_free( image->data );
 	qm_os_memory_free( image );
 }
 
