@@ -55,15 +55,9 @@ QmImage *qm_image_compress_s3tc( const QmImage *src, PLImageFormat dstFormat )
 	                  glFormat, buf,
 	                  ( src->width + 3 ) / 4 * blockSize );
 
-	QmImage *image = PlCreateImage( nullptr, src->width, src->height, 0, src->colour_format, PL_IMAGEFORMAT_RGB_DXT1 );
-	if ( image != nullptr )
-	{
-		image->data[ 0 ] = buf;
-	}
-	else
-	{
-		qm_os_memory_free( buf );
-	}
+	QmImage *image = PlCreateImage( buf, src->width, src->height, 0, src->colour_format, PL_IMAGEFORMAT_RGB_DXT1 );
+
+	qm_os_memory_free( buf );
 
 	return image;
 }
