@@ -98,7 +98,7 @@ QmImage *qm_image_3df_parse( QmFsFile *file ) {
 	}
 
 	/* now we can load the actual data in */
-	size_t srcSize = PlGetImageSize( dataFormat, w, h );
+	size_t srcSize = qm_image_get_format_size( dataFormat, w, h );
 	uint8_t *srcBuf = QM_OS_MEMORY_MALLOC_( srcSize );
 	if ( qm_file_read( file, srcBuf, sizeof( char ), srcSize ) != srcSize ) {
 		qm_os_memory_free( srcBuf );
@@ -106,7 +106,7 @@ QmImage *qm_image_3df_parse( QmFsFile *file ) {
 	}
 
 	/* convert it... */
-	size_t dstSize = PlGetImageSize( PL_IMAGEFORMAT_RGBA8, w, h );
+	size_t dstSize = qm_image_get_format_size( PL_IMAGEFORMAT_RGBA8, w, h );
 	uint8_t *dstBuf = QM_OS_MEMORY_MALLOC_( dstSize );
 	if ( dataFormat != PL_IMAGEFORMAT_RGBA8 ) {
 		switch ( dataFormat ) {

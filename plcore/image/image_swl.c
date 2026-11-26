@@ -48,7 +48,7 @@ QmImage *qm_image_swl_parse( QmFsFile *fin ) {
 	out->levels = 4;
 	out->colour_format = PL_COLOURFORMAT_RGBA;
 	out->format = PL_IMAGEFORMAT_RGBA8;
-	out->size = PlGetImageSize( out->format, out->width, out->height );
+	out->size = qm_image_get_format_size( out->format, out->width, out->height );
 
 	unsigned int mip_w = out->width;
 	unsigned int mip_h = out->height;
@@ -68,7 +68,7 @@ QmImage *qm_image_swl_parse( QmFsFile *fin ) {
 
 		out->data = QM_OS_MEMORY_CALLOC( out->levels, sizeof( uint8_t * ) );
 
-		size_t level_size = PlGetImageSize( out->format, mip_w, mip_h );
+		size_t level_size = qm_image_get_format_size( out->format, mip_w, mip_h );
 		out->data[ i ] = QM_OS_MEMORY_CALLOC( level_size, sizeof( uint8_t ) );
 
 		/* now we fill in the buf we just allocated,

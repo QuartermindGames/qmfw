@@ -4,8 +4,9 @@
  * This software is licensed under MIT. See LICENSE for more details.
  */
 
-#include "image_private.h"
 #include "qmos/public/qm_os_memory.h"
+
+#include "image_private.h"
 
 #define DDS_MAGIC      QM_OS_MAGIC_TO_NUM( 'D', 'D', 'S', ' ' )
 #define DDS_MAGIC_DXT1 QM_OS_MAGIC_TO_NUM( 'D', 'X', 'T', '1' )

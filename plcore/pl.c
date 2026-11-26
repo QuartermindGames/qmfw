@@ -344,7 +344,7 @@ static PLPluginExportTable exportTable = {
         .GetFileSize = qm_fs_file_get_size,
 
         /* pl_image.h */
-        .GetImageSize = PlGetImageSize,
+        .GetImageSize = qm_image_get_format_size,
 
         .SkipWhitespace = qm_parse_skip_whitespace,
         .SkipLine = qm_parse_skip_line,

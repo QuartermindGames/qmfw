@@ -37,34 +37,34 @@ typedef struct QmImagePixelFormatDescriptor
 	QmImageChannelFormatDescriptor channels[ QM_IMAGE_MAX_CHANNELS ];
 } QmImagePixelFormatDescriptor;
 
-#define QM_IMAGE_FORMAT_RGBA8_DESC()                                                                                          \
-	( QmImagePixelFormatDescriptor ) { .numChannels = 4,                                                                      \
-		                               .channels    = {                                                                       \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_GREEN}, \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_BLUE },  \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_ALPHA}, \
+#define QM_IMAGE_FORMAT_RGBA8_DESC()                                                                                       \
+	( QmImagePixelFormatDescriptor ) { .numChannels = 4,                                                                   \
+	                                   .channels    = {                                                                    \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_GREEN},   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_BLUE },   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_ALPHA},   \
  }, }
-#define QM_IMAGE_FORMAT_RGB8_DESC()                                                                                           \
-	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                      \
-		                               .channels    = {                                                                       \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_GREEN}, \
-                                               {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
+#define QM_IMAGE_FORMAT_RGB8_DESC()                                                                                        \
+	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                   \
+	                                   .channels    = {                                                                    \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_GREEN},   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_U8, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
  }, }
-#define QM_IMAGE_FORMAT_RGB16F_DESC()                                                                                          \
-	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                       \
-		                               .channels    = {                                                                        \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_GREEN}, \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
+#define QM_IMAGE_FORMAT_RGB16F_DESC()                                                                                       \
+	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                    \
+	                                   .channels    = {                                                                     \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_GREEN},   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F16, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
  }, }
-#define QM_IMAGE_FORMAT_RGB32F_DESC()                                                                                          \
-	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                       \
-		                               .channels    = {                                                                        \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_GREEN}, \
-                                               {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
+#define QM_IMAGE_FORMAT_RGB32F_DESC()                                                                                       \
+	( QmImagePixelFormatDescriptor ) { .numChannels = 3,                                                                    \
+	                                   .channels    = {                                                                     \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_RED  },   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_GREEN},   \
+		                                       {.format = QM_IMAGE_DATA_FORMAT_F32, .type = QM_IMAGE_CHANNEL_TYPE_BLUE } \
  }, }
 
 typedef enum PLImageFormat
@@ -169,7 +169,7 @@ void PlRegisterImageLoader( const char *extension, QmImage *( *ParseFile )( QmFs
 void PlRegisterStandardImageLoaders( unsigned int flags );
 void PlClearImageLoaders( void );
 
-QmImage *PlCreateImage( void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat );
+QmImage *PlCreateImage( const void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat );
 void     PlDestroyImage( QmImage *image );
 
 QmImage *qm_image_load( const char *path );
@@ -184,8 +184,8 @@ void qm_image_replace_colour( QmImage *image, QmMathColour4ub target, QmMathColo
 
 bool PlFlipImageVertical( QmImage *image );
 
-void         PlFreeImage( QmImage *image );
-unsigned int PlGetImageSize( PLImageFormat format, unsigned int width, unsigned int height );
+void   PlFreeImage( QmImage *image );
+size_t qm_image_get_format_size( PLImageFormat format, unsigned int width, unsigned int height );
 
 unsigned int PlGetImageFormatPixelSize( PLImageFormat format );
 unsigned int PlGetNumImageFormatChannels( PLImageFormat format );
@@ -205,10 +205,16 @@ unsigned int PlGetImageDataSize( const QmImage *image );
 QmImage *qm_image_resize( QmImage *image, unsigned int newWidth, unsigned int newHeight );
 QmImage *qm_image_crop( QmImage *image, unsigned int newWidth, unsigned int newHeight, unsigned int xOffset, unsigned int yOffset );
 
-// S3TC Library Interface
-void PlBlockDecompressImageDXT1( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
-void PlBlockDecompressImageDXT3( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
-void PlBlockDecompressImageDXT5( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Compression
+
+QmImage *qm_image_compress_s3tc( const QmImage *src, PLImageFormat dstFormat );
+
+void qm_image_compression_decompress_dxt1( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
+void qm_image_compression_decompress_dxt3( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
+void qm_image_compression_decompress_dxt5( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image );
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 QmImage *qm_image_3df_parse( QmFsFile *file );
 QmImage *qm_image_ftx_parse( QmFsFile *file );

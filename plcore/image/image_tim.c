@@ -194,7 +194,7 @@ static bool TIM_ReadFile( QmFsFile *fin, QmImage *out ) {
 		}
 	}
 
-	out->size = PlGetImageSize( out->format, out->width, out->height );
+	out->size = qm_image_get_format_size( out->format, out->width, out->height );
 	out->levels = 1;
 
 	out->data = QM_OS_MEMORY_CALLOC( out->levels, sizeof( uint8_t * ) );

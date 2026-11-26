@@ -58,7 +58,7 @@ typedef struct PLPluginExportTable {
 	 * IMAGE API
 	 **/
 
-	unsigned int ( *GetImageSize )( PLImageFormat format, unsigned int width, unsigned int height );
+	size_t ( *GetImageSize )( PLImageFormat format, unsigned int width, unsigned int height );
 
 	/** v2.0 ************************************************/
 

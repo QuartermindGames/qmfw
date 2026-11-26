@@ -73,7 +73,7 @@ static QmImage *LoadStbImage( QmFsFile *file ) {
 		image->levels = 1;
 		image->data   = QM_OS_MEMORY_NEW_( uint8_t *, image->levels );
 
-		image->size      = PlGetImageSize( image->format, image->width, image->height );
+		image->size      = qm_image_get_format_size( image->format, image->width, image->height );
 		image->data[ 0 ] = data;
 		data             = NULL;
 	}
@@ -154,7 +154,7 @@ void PlClearImageLoaders( void ) {
 	numImageLoaders = 0;
 }
 
-QmImage *PlCreateImage( void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat ) {
+QmImage *PlCreateImage( const void *buf, unsigned int w, unsigned int h, unsigned int numFrames, PLColourFormat col, PLImageFormat dat ) {
 	QmImage *image = QM_OS_MEMORY_MALLOC_( sizeof( QmImage ) );
 	if ( image == NULL ) {
 		return NULL;
@@ -164,7 +164,7 @@ QmImage *PlCreateImage( void *buf, unsigned int w, unsigned int h, unsigned int 
 	image->height = h;
 	image->colour_format = col;
 	image->format = dat;
-	image->size = PlGetImageSize( image->format, image->width, image->height );
+	image->size = qm_image_get_format_size( image->format, image->width, image->height );
 	image->levels = 1;
 
 	if ( numFrames > 0 ) {
@@ -315,7 +315,7 @@ bool qm_image_write( const QmImage *image, const char *path, unsigned int qualit
 }
 
 static bool RGB8toRGBA8( QmImage *image ) {
-	size_t size = PlGetImageSize( PL_IMAGEFORMAT_RGBA8, image->width, image->height );
+	size_t size = qm_image_get_format_size( PL_IMAGEFORMAT_RGBA8, image->width, image->height );
 	if ( size == 0 ) {
 		return false;
 	}
@@ -399,7 +399,7 @@ bool PlConvertPixelFormat( QmImage *image, PLImageFormat new_format ) {
 				}
 				case PL_IMAGEFORMAT_R8:
 				{
-					size_t dstSize = PlGetImageSize( PL_IMAGEFORMAT_R8, image->width, image->height );
+					size_t dstSize = qm_image_get_format_size( PL_IMAGEFORMAT_R8, image->width, image->height );
 					assert( dstSize != 0 );
 
 					typedef struct R8
@@ -431,7 +431,7 @@ bool PlConvertPixelFormat( QmImage *image, PLImageFormat new_format ) {
 			size_t           numSrcPixels = image->size / sizeof( QmMathColour4ub );
 			if ( new_format == PL_IMAGEFORMAT_R8 )
 			{
-				size_t dstSize = PlGetImageSize( PL_IMAGEFORMAT_R8, image->width, image->height );
+				size_t dstSize = qm_image_get_format_size( PL_IMAGEFORMAT_R8, image->width, image->height );
 				assert( dstSize != 0 );
 
 				typedef struct R8
@@ -508,7 +508,7 @@ bool PlConvertPixelFormat( QmImage *image, PLImageFormat new_format ) {
 	return false;
 }
 
-unsigned int PlGetImageSize( PLImageFormat format, unsigned int width, unsigned int height )
+size_t qm_image_get_format_size( PLImageFormat format, unsigned int width, unsigned int height )
 {
 	switch ( format )
 	{
@@ -772,7 +772,7 @@ void *PlGetImageData( QmImage *image, unsigned int frame, unsigned int mip ) {
 }
 
 unsigned int PlGetImageDataSize( const QmImage *image ) {
-	return PlGetImageSize( image->format, image->width, image->height );
+	return qm_image_get_format_size( image->format, image->width, image->height );
 }
 
 QmImage *qm_image_resize( QmImage *image, unsigned int newWidth, unsigned int newHeight ) {
@@ -827,42 +827,4 @@ QmImage *qm_image_crop( QmImage *image, unsigned int newWidth, unsigned int newH
 	}
 
 	return newImage;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-// S3TC Library Interface
-/////////////////////////////////////////////////////////////////////////////////////
-
-void DecompressBlockBC1( uint32_t x, uint32_t y, uint32_t stride, const uint8_t *blockStorage, unsigned char *image );// DXT1
-void DecompressBlockBC2( uint32_t x, uint32_t y, uint32_t stride, const uint8_t *blockStorage, unsigned char *image );// DXT3
-void DecompressBlockBC3( uint32_t x, uint32_t y, uint32_t stride, const uint8_t *blockStorage, unsigned char *image );// DXT5
-
-void PlBlockDecompressImageDXT1( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image ) {
-	const uint32_t stride = width * sizeof( uint32_t );
-	for ( uint32_t j = 0; j < height; j += 4 ) {
-		for ( uint32_t i = 0; i < width; i += 4 ) {
-			DecompressBlockBC1( i, j, stride, blockStorage, image );
-			blockStorage += 8;
-		}
-	}
-}
-
-void PlBlockDecompressImageDXT3( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image ) {
-	const uint32_t stride = width * sizeof( uint32_t );
-	for ( uint32_t j = 0; j < height; j += 4 ) {
-		for ( uint32_t i = 0; i < width; i += 4 ) {
-			DecompressBlockBC2( i, j, stride, blockStorage, image );
-			blockStorage += 16;
-		}
-	}
-}
-
-void PlBlockDecompressImageDXT5( unsigned int width, unsigned int height, const unsigned char *blockStorage, unsigned char *image ) {
-	const uint32_t stride = width * sizeof( uint32_t );
-	for ( uint32_t j = 0; j < height; j += 4 ) {
-		for ( uint32_t i = 0; i < width; i += 4 ) {
-			DecompressBlockBC3( i, j, stride, blockStorage, image );
-			blockStorage += 16;
-		}
-	}
 }
