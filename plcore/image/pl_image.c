@@ -508,11 +508,23 @@ bool PlConvertPixelFormat( QmImage *image, PLImageFormat new_format ) {
 	return false;
 }
 
-unsigned int PlGetImageSize( PLImageFormat format, unsigned int width, unsigned int height ) {
-	switch ( format ) {
+unsigned int PlGetImageSize( PLImageFormat format, unsigned int width, unsigned int height )
+{
+	switch ( format )
+	{
 		case PL_IMAGEFORMAT_RGB_DXT1:
-			return ( width * height ) >> 1;
-		default: {
+		{
+			constexpr unsigned int BLOCK_SIZE = 8;
+			return ( width + 3 ) / 4 * BLOCK_SIZE * ( ( height + 3 ) / 4 );
+		}
+		case PL_IMAGEFORMAT_RGBA_DXT3:
+		case PL_IMAGEFORMAT_RGBA_DXT5:
+		{
+			constexpr unsigned int BLOCK_SIZE = 16;
+			return ( width + 3 ) / 4 * BLOCK_SIZE * ( ( height + 3 ) / 4 );
+		}
+		default:
+		{
 			unsigned int bytes = PlGetImageFormatPixelSize( format );
 			return width * height * bytes;
 		}
