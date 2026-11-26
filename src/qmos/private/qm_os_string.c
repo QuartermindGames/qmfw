@@ -238,7 +238,7 @@ char *qm_os_string_replace( char *dst, const size_t size, const char *find, cons
 	}
 
 	p = strncpy( p, insert, insertLen );
-	if ( p != nullptr && dst - p + insertLen > dstLen )
+	if ( dst - p + insertLen > dstLen )
 	{
 		*( p + insertLen ) = '\0';
 	}
