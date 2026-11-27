@@ -204,10 +204,10 @@ QM_TEST_FUNC( string_replace )
 {
 	char tmp[ 64 ];
 	snprintf( tmp, sizeof( tmp ), "Hello world, how's it going?" );
-	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "Hello", "Goodbye" ) != nullptr );
+	QM_TEST_ASSERT( qm_os_string_overwrite( tmp, sizeof( tmp ), "Hello", "Goodbye" ) != nullptr );
 	QM_TEST_ASSERT( strcmp( tmp, "Goodbyeorld, how's it going?" ) == 0 );
-	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "going?", "going and going!" ) != nullptr );
-	QM_TEST_ASSERT( qm_os_string_replace( tmp, sizeof( tmp ), "Goodbye", "Hello w" ) != nullptr );
+	QM_TEST_ASSERT( qm_os_string_overwrite( tmp, sizeof( tmp ), "going?", "going and going!" ) != nullptr );
+	QM_TEST_ASSERT( qm_os_string_overwrite( tmp, sizeof( tmp ), "Goodbye", "Hello w" ) != nullptr );
 	QM_TEST_ASSERT( strcmp( tmp, "Hello world, how's it going and going!" ) == 0 );
 }
 QM_TEST_FUNC_END()
